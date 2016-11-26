@@ -109,6 +109,28 @@ public class Call implements Serializable {
 				+ "duration: " + this.duration + "s]]";
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Call)) return false;
+
+		Call call = (Call) o;
+
+		if (duration != call.duration) return false;
+		if (type != call.type) return false;
+		if (date != null ? !date.equals(call.date) : call.date != null) return false;
+		return callerNumber != null ? callerNumber.equals(call.callerNumber) : call.callerNumber == null;
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = type != null ? type.hashCode() : 0;
+		result = 31 * result + (date != null ? date.hashCode() : 0);
+		result = 31 * result + (callerNumber != null ? callerNumber.hashCode() : 0);
+		result = 31 * result + duration;
+		return result;
+	}
 
 	/**
 	 * A Builder to create a Call object.
