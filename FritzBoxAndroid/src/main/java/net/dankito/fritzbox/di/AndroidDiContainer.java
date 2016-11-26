@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import net.dankito.fritzbox.model.UserSettings;
 import net.dankito.fritzbox.services.AlarmManagerCronService;
+import net.dankito.fritzbox.services.AndroidFileStorageService;
 import net.dankito.fritzbox.services.CallListObserver;
 import net.dankito.fritzbox.services.CsvParser;
 import net.dankito.fritzbox.services.DigestService;
@@ -11,6 +12,7 @@ import net.dankito.fritzbox.services.FritzBoxClient;
 import net.dankito.fritzbox.services.ICronService;
 import net.dankito.fritzbox.services.ICsvParser;
 import net.dankito.fritzbox.services.IDigestService;
+import net.dankito.fritzbox.services.IFileStorageService;
 import net.dankito.fritzbox.services.NotificationsService;
 import net.dankito.fritzbox.utils.web.IWebClient;
 import net.dankito.fritzbox.utils.web.OkHttpWebClient;
@@ -87,8 +89,15 @@ public class AndroidDiContainer {
 
   @Provides
   @Singleton
-  public CallListObserver provideCallListObserver(FritzBoxClient fritzBoxClient, ICronService cronService, NotificationsService notificationsService, UserSettings userSettings) {
-    return new CallListObserver(getActivity(), fritzBoxClient, cronService, notificationsService, userSettings);
+  public IFileStorageService provideFileStorageService() {
+    return new AndroidFileStorageService(getActivity());
+  }
+
+  @Provides
+  @Singleton
+  public CallListObserver provideCallListObserver(FritzBoxClient fritzBoxClient, ICronService cronService, NotificationsService notificationsService,
+                                                  IFileStorageService fileStorageService, UserSettings userSettings) {
+    return new CallListObserver(getActivity(), fritzBoxClient, cronService, notificationsService, fileStorageService, userSettings);
   }
 
 }
