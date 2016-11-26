@@ -1,11 +1,15 @@
 package net.dankito.fritzbox.services;
 
+import net.dankito.fritzbox.model.Call;
 import net.dankito.fritzbox.model.HashAlgorithm;
+import net.dankito.fritzbox.utils.StringUtils;
 import net.dankito.fritzbox.utils.web.IWebClient;
 import net.dankito.fritzbox.utils.web.RequestParameters;
+import net.dankito.fritzbox.utils.web.callbacks.GetCallListCallback;
 import net.dankito.fritzbox.utils.web.callbacks.GetStringInfoCallback;
 import net.dankito.fritzbox.utils.web.callbacks.LoginCallback;
 import net.dankito.fritzbox.utils.web.callbacks.RequestCallback;
+import net.dankito.fritzbox.utils.web.responses.GetCallListResponse;
 import net.dankito.fritzbox.utils.web.responses.GetStringInfoResponse;
 import net.dankito.fritzbox.utils.web.responses.LoginResponse;
 import net.dankito.fritzbox.utils.web.responses.WebClientResponse;
@@ -13,8 +17,10 @@ import net.dankito.fritzbox.utils.web.responses.WebClientResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * In large parts a copy of https://github.com/ISchwarz23/FritzBox-API.
@@ -35,15 +41,18 @@ public class FritzBoxClient {
 
   protected IDigestService digestService;
 
+  protected ICsvParser csvParser;
 
-  public FritzBoxClient(String fritzBoxAddress, IWebClient webClient, IDigestService digestService) {
+
+  public FritzBoxClient(String fritzBoxAddress, IWebClient webClient, IDigestService digestService, ICsvParser csvParser) {
     this.fritzBoxAddress = fritzBoxAddress;
     this.webClient = webClient;
     this.digestService = digestService;
+    this.csvParser = csvParser;
   }
 
 
-  public void loginAsync(final String password, final LoginCallback callback) throws Exception {
+  public void loginAsync(final String password, final LoginCallback callback) {
     this.getChallenge(new GetStringInfoCallback() {
       @Override
       public void completed(GetStringInfoResponse response) {
@@ -149,12 +158,67 @@ public class FritzBoxClient {
   }
 
 
+  /**
+   * Requests the call list from the FritzBox and returns it.
+   *
+   * @return A list of call objects.
+   * @throws IOException
+   *             when an exception during communication occurred.
+   */
+  public void getCallListAsync(String password, final GetCallListCallback callback) {
+    if(isLoggedIn() == false) {
+      loginAsync(password, new LoginCallback() {
+        @Override
+        public void completed(LoginResponse response) {
+          if(response.isSuccessful() == false) {
+            callback.completed(new GetCallListResponse(response.getError()));
+          }
+          else {
+            doGetCallListAsync(callback);
+          }
+        }
+      });
+    }
+    else {
+      doGetCallListAsync(callback);
+    }
+  }
+
+  protected void doGetCallListAsync(final GetCallListCallback callback) {
+    String url = "http://" + this.fritzBoxAddress + "/fon_num/foncalls_list.lua?sid="+ this.sessionId + "&csv=";
+
+    webClient.getAsync(createDefaultRequestParameters(url), new RequestCallback() {
+      @Override
+      public void completed(WebClientResponse response) {
+        if(response.isSuccessful() == false) {
+          callback.completed(new GetCallListResponse(response.getError()));
+        }
+        else {
+          parseCallListCsv(response, callback);
+        }
+      }
+    });
+  }
+
+  protected void parseCallListCsv(WebClientResponse response, GetCallListCallback callback) {
+    String csvFileContent = response.getBody();
+    List<Call> callList = csvParser.parseCallList(csvFileContent);
+
+    callback.completed(new GetCallListResponse(callList));
+  }
+
+
   protected RequestParameters createDefaultRequestParameters(String url) {
     RequestParameters parameters = new RequestParameters(url);
 
     parameters.setCountConnectionRetries(COUNT_CONNECTION_RETRIES);
 
     return parameters;
+  }
+
+
+  public boolean isLoggedIn() {
+    return StringUtils.isNotNullOrEmpty(sessionId);
   }
 
 }
