@@ -54,6 +54,11 @@ public class FritzBoxClient {
 
 
   public void loginAsync(final LoginCallback callback) {
+    if(userSettings.isFritzBoxAddressSet() == false || userSettings.isFritzBoxPasswordSet() == false) {
+      callback.completed(new LoginResponse("Entweder FritzBox Adresse oder Password is nicht gesetzt")); // TODO: translate
+      return;
+    }
+
     this.getChallenge(new GetStringInfoCallback() {
       @Override
       public void completed(GetStringInfoResponse response) {
