@@ -1,11 +1,14 @@
 package net.dankito.fritzbox;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import net.dankito.fritzbox.adapter.MainActivityTabsAdapter;
 import net.dankito.fritzbox.di.AndroidDiComponent;
 import net.dankito.fritzbox.di.AndroidDiContainer;
 import net.dankito.fritzbox.di.DaggerAndroidDiComponent;
@@ -13,6 +16,8 @@ import net.dankito.fritzbox.di.DaggerAndroidDiComponent;
 public class MainActivity extends AppCompatActivity {
 
   protected AndroidDiComponent component;
+
+  protected MainActivityTabsAdapter tabsAdapter;
 
 
   @Override
@@ -36,6 +41,15 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+
+    tabsAdapter = new MainActivityTabsAdapter(this, getSupportFragmentManager());
+
+    // Set up the ViewPager with the sections adapter.
+    ViewPager viewPager = (ViewPager)findViewById(R.id.viewPager);
+    viewPager.setAdapter(tabsAdapter);
+
+    TabLayout tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+    tabLayout.setupWithViewPager(viewPager);
   }
 
   @Override
