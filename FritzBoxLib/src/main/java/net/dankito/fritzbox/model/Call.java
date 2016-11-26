@@ -19,14 +19,19 @@ public class Call implements Serializable {
 	private static final DateFormat DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 	private static final DateFormat DURATION_FORMATTER = new SimpleDateFormat("HH:mm");
 
-	private final CallType type;
-	private final Date date;
-	private final String callerName;
-	private final String callerNumber;
-	private final String substation;
-	private final String substationNumber;
-	private final int duration;
+	private CallType type;
+	private Date date;
+	private String callerName;
+	private String callerNumber;
+	private String substation;
+	private String substationNumber;
+	private int duration;
 
+
+	// for Jackson
+	public Call() {
+
+	}
 
 	private Call(final Builder builder) {
 		this.type = builder.type;
@@ -47,6 +52,10 @@ public class Call implements Serializable {
 		return this.type;
 	}
 
+	public void setType(CallType type) {
+		this.type = type;
+	}
+
 	/**
 	 * Gives the call type.
 	 *
@@ -54,6 +63,10 @@ public class Call implements Serializable {
 	 */
 	public Date getDate() {
 		return this.date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	/**
@@ -65,6 +78,10 @@ public class Call implements Serializable {
 		return this.callerName;
 	}
 
+	public void setCallerName(String callerName) {
+		this.callerName = callerName;
+	}
+
 	/**
 	 * Gives the caller number.
 	 *
@@ -72,6 +89,10 @@ public class Call implements Serializable {
 	 */
 	public String getCallerNumber() {
 		return this.callerNumber;
+	}
+
+	public void setCallerNumber(String callerNumber) {
+		this.callerNumber = callerNumber;
 	}
 
 	/**
@@ -83,6 +104,10 @@ public class Call implements Serializable {
 		return this.substation;
 	}
 
+	public void setSubstationName(String substationName) {
+		this.substation = substationName;
+	}
+
 	/**
 	 * Gives the substation number.
 	 *
@@ -92,6 +117,10 @@ public class Call implements Serializable {
 		return this.substationNumber;
 	}
 
+	public void setSubstationNumber(String substationNumber) {
+		this.substationNumber = substationNumber;
+	}
+
 	/**
 	 * The duration of the call in minutes.
 	 *
@@ -99,6 +128,10 @@ public class Call implements Serializable {
 	 */
 	public int getDuration() {
 		return this.duration;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 
 	@Override
