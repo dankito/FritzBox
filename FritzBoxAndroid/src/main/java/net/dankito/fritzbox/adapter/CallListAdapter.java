@@ -36,9 +36,10 @@ public class CallListAdapter extends BaseAdapter {
   protected List<Call> callList = new ArrayList<>();
 
 
-  public CallListAdapter(Activity activity, UserSettings userSettings) {
+  public CallListAdapter(Activity activity, UserSettings userSettings, List<Call> callList) {
     this.activity = activity;
     this.userSettings = userSettings;
+    this.callList = callList;
   }
 
 

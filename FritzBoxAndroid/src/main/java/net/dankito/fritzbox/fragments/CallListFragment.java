@@ -41,7 +41,7 @@ public class CallListFragment extends Fragment {
 
     View view = inflater.inflate(R.layout.fragment_call_list, container, false);
 
-    callListAdapter = new CallListAdapter(getActivity(), userSettings);
+    callListAdapter = new CallListAdapter(getActivity(), userSettings, callListObserver.getCallList());
 
     ListView lstvwCallList = (ListView)view.findViewById(R.id.lstvwCallList);
     lstvwCallList.setAdapter(callListAdapter);
