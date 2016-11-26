@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FritzBox</string>
+    <string name="action_settings">Einstellungen</string>
+
+    <string name="tab_title_call_list">Anrufliste</string>
+
+    <string name="notification_could_not_get_call_list">Konnte Anrufliste nicht ermitteln</string>
+    <string name="notification_missed_call">Verpasster Anruf</string>
+</resources>
