@@ -82,7 +82,7 @@ public class CallListObserver {
 
   protected void readStoredCallListAndThenUpdate() {
     try {
-      this.callList = Arrays.asList(fileStorageService.readObjectFromFile(CALL_LIST_FILENAME, Call[].class));
+      this.callList = new ArrayList<>(Arrays.asList(fileStorageService.readObjectFromFile(CALL_LIST_FILENAME, Call[].class)));
 
       callCallListUpdatedListeners(callList);
     } catch(Exception e) {
