@@ -1,9 +1,15 @@
 package net.dankito.fritzbox;
 
+import net.dankito.fritzbox.model.Call;
+import net.dankito.fritzbox.model.CallType;
+import net.dankito.fritzbox.services.CsvParser;
 import net.dankito.fritzbox.services.DigestService;
 import net.dankito.fritzbox.services.FritzBoxClient;
+import net.dankito.fritzbox.utils.StringUtils;
 import net.dankito.fritzbox.utils.web.OkHttpWebClient;
+import net.dankito.fritzbox.utils.web.callbacks.GetCallListCallback;
 import net.dankito.fritzbox.utils.web.callbacks.LoginCallback;
+import net.dankito.fritzbox.utils.web.responses.GetCallListResponse;
 import net.dankito.fritzbox.utils.web.responses.LoginResponse;
 
 import org.junit.Assert;
@@ -39,12 +45,12 @@ public class FritzBoxClientTest {
   public void setUp() throws IOException {
     this.testDataProperties = loadTestDataProperties();
 
-    underTest = new FritzBoxClient(getTestFritzBoxAddress(), new OkHttpWebClient(), new DigestService());
+    underTest = new FritzBoxClient(getTestFritzBoxAddress(), new OkHttpWebClient(), new DigestService(), new CsvParser());
   }
 
 
   @Test
-  public void login() throws Exception {
+  public void loginAsync() {
     final List<LoginResponse> responseList = new ArrayList<>();
     final CountDownLatch countDownLatch = new CountDownLatch(1);
 
@@ -62,6 +68,46 @@ public class FritzBoxClientTest {
 
     LoginResponse response = responseList.get(0);
     Assert.assertTrue(response.isSuccessful());
+  }
+
+
+  @Test
+  public void parseCallListCsv() {
+    final List<GetCallListResponse> responseList = new ArrayList<>();
+    final CountDownLatch countDownLatch = new CountDownLatch(1);
+
+    underTest.getCallListAsync(getTestFritzBoxPassword(), new GetCallListCallback() {
+      @Override
+      public void completed(GetCallListResponse response) {
+        responseList.add(response);
+        countDownLatch.countDown();
+      }
+    });
+
+    try { countDownLatch.await(5, TimeUnit.MINUTES); } catch(Exception ignored) { }
+
+    Assert.assertEquals(1, responseList.size());
+
+    GetCallListResponse response = responseList.get(0);
+    Assert.assertTrue(response.isSuccessful());
+    Assert.assertTrue(response.getCallList().size() > 0);
+
+    for(Call call : response.getCallList()) {
+      if("Unbekannt".equals(call.getCallerName()) == false) {
+        Assert.assertTrue(StringUtils.isNotNullOrEmpty(call.getCallerNumber()));
+      }
+      Assert.assertNotNull(call.getDate());
+      Assert.assertNotNull(call.getType());
+      Assert.assertTrue(StringUtils.isNotNullOrEmpty(call.getSubstationNumber()));
+
+      if(call.getType() == CallType.MISSED_CALL) {
+        Assert.assertEquals(0, call.getDuration());
+      }
+      else if(call.getType() == CallType.UNKNOWEN) {
+        Assert.assertTrue(call.getDuration() > 0);
+        Assert.assertTrue(StringUtils.isNotNullOrEmpty(call.getSubstationName()));
+      }
+    }
   }
 
 
