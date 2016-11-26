@@ -2,6 +2,7 @@ package net.dankito.fritzbox;
 
 import net.dankito.fritzbox.model.Call;
 import net.dankito.fritzbox.model.CallType;
+import net.dankito.fritzbox.model.UserSettings;
 import net.dankito.fritzbox.services.CsvParser;
 import net.dankito.fritzbox.services.DigestService;
 import net.dankito.fritzbox.services.FritzBoxClient;
@@ -38,14 +39,16 @@ public class FritzBoxClientTest {
 
   protected FritzBoxClient underTest;
 
-  protected Properties testDataProperties = null;
+  protected UserSettings userSettings;
 
 
   @Before
   public void setUp() throws IOException {
-    this.testDataProperties = loadTestDataProperties();
+    Properties testDataProperties = loadTestDataProperties();
 
-    underTest = new FritzBoxClient(getTestFritzBoxAddress(), new OkHttpWebClient(), new DigestService(), new CsvParser());
+    this.userSettings = new UserSettings(getTestFritzBoxAddress(testDataProperties), getTestFritzBoxPassword(testDataProperties));
+
+    underTest = new FritzBoxClient(userSettings, new OkHttpWebClient(), new DigestService(), new CsvParser());
   }
 
 
@@ -54,7 +57,7 @@ public class FritzBoxClientTest {
     final List<LoginResponse> responseList = new ArrayList<>();
     final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    underTest.loginAsync(getTestFritzBoxPassword(), new LoginCallback() {
+    underTest.loginAsync(userSettings.getFritzboxPassword(), new LoginCallback() {
       @Override
       public void completed(LoginResponse response) {
         responseList.add(response);
@@ -76,7 +79,7 @@ public class FritzBoxClientTest {
     final List<GetCallListResponse> responseList = new ArrayList<>();
     final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    underTest.getCallListAsync(getTestFritzBoxPassword(), new GetCallListCallback() {
+    underTest.getCallListAsync(userSettings.getFritzboxPassword(), new GetCallListCallback() {
       @Override
       public void completed(GetCallListResponse response) {
         responseList.add(response);
@@ -118,11 +121,11 @@ public class FritzBoxClientTest {
     return testDataProperties;
   }
 
-  protected String getTestFritzBoxAddress() {
+  protected String getTestFritzBoxAddress(Properties testDataProperties) {
     return testDataProperties.getProperty(TEST_DATA_FRITZ_BOX_ADDRESS);
   }
 
-  protected String getTestFritzBoxPassword() {
+  protected String getTestFritzBoxPassword(Properties testDataProperties) {
     return testDataProperties.getProperty(TEST_DATA_FRITZ_BOX_PASSWORD);
   }
 

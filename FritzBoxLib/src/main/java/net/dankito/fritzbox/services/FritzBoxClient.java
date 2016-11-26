@@ -2,6 +2,7 @@ package net.dankito.fritzbox.services;
 
 import net.dankito.fritzbox.model.Call;
 import net.dankito.fritzbox.model.HashAlgorithm;
+import net.dankito.fritzbox.model.UserSettings;
 import net.dankito.fritzbox.utils.StringUtils;
 import net.dankito.fritzbox.utils.web.IWebClient;
 import net.dankito.fritzbox.utils.web.RequestParameters;
@@ -33,7 +34,7 @@ public class FritzBoxClient {
   private static final Logger log = LoggerFactory.getLogger(FritzBoxClient.class);
 
 
-  protected String fritzBoxAddress;
+  protected UserSettings userSettings;
 
   protected String sessionId;
 
@@ -44,8 +45,8 @@ public class FritzBoxClient {
   protected ICsvParser csvParser;
 
 
-  public FritzBoxClient(String fritzBoxAddress, IWebClient webClient, IDigestService digestService, ICsvParser csvParser) {
-    this.fritzBoxAddress = fritzBoxAddress;
+  public FritzBoxClient(UserSettings userSettings, IWebClient webClient, IDigestService digestService, ICsvParser csvParser) {
+    this.userSettings = userSettings;
     this.webClient = webClient;
     this.digestService = digestService;
     this.csvParser = csvParser;
@@ -90,7 +91,7 @@ public class FritzBoxClient {
   }
 
   protected void getChallenge(final GetStringInfoCallback callback) {
-    String url = "http://" + this.fritzBoxAddress + "/login_sid.lua";
+    String url = "http://" + userSettings.getFritzboxAddress() + "/login_sid.lua";
     webClient.getAsync(createDefaultRequestParameters(url), new RequestCallback() {
       @Override
       public void completed(WebClientResponse response) {
@@ -112,7 +113,7 @@ public class FritzBoxClient {
   protected void sendLogin(final String challenge, final String password, final GetStringInfoCallback callback) {
     try {
       final String loginChallengeResponse = calculateLoginChallengeResponse(challenge, password);
-      String url = "http://" + this.fritzBoxAddress + "/login_sid.lua?user=&response=" + loginChallengeResponse;
+      String url = "http://" + userSettings.getFritzboxAddress() + "/login_sid.lua?user=&response=" + loginChallengeResponse;
 
       webClient.getAsync(createDefaultRequestParameters(url), new RequestCallback() {
         @Override
@@ -185,7 +186,7 @@ public class FritzBoxClient {
   }
 
   protected void doGetCallListAsync(final GetCallListCallback callback) {
-    String url = "http://" + this.fritzBoxAddress + "/fon_num/foncalls_list.lua?sid="+ this.sessionId + "&csv=";
+    String url = "http://" + userSettings.getFritzboxAddress() + "/fon_num/foncalls_list.lua?sid="+ this.sessionId + "&csv=";
 
     webClient.getAsync(createDefaultRequestParameters(url), new RequestCallback() {
       @Override
