@@ -5,15 +5,37 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import net.dankito.fritzbox.di.AndroidDiComponent;
+import net.dankito.fritzbox.di.AndroidDiContainer;
+import net.dankito.fritzbox.di.DaggerAndroidDiComponent;
 
 public class MainActivity extends AppCompatActivity {
+
+  protected AndroidDiComponent component;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    setupDependencyInjection();
+
+    setupUi();
+  }
+
+  protected void setupDependencyInjection() {
+    component = DaggerAndroidDiComponent.builder()
+        .androidDiContainer(new AndroidDiContainer(this))
+        .build();
+
+    component.inject(this);
+  }
+
+  protected void setupUi() {
     setContentView(R.layout.activity_main);
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
@@ -49,4 +71,10 @@ public class MainActivity extends AppCompatActivity {
 
     return super.onOptionsItemSelected(item);
   }
+
+
+  public AndroidDiComponent getComponent() {
+    return component;
+  }
+
 }
