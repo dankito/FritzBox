@@ -10,6 +10,10 @@ public class UserSettings {
 
   protected String fritzboxPassword;
 
+  protected boolean enablePeriodicalMissedCallsCheck;
+
+  protected long periodicalMissedCallsCheckInterval;
+
 
   public UserSettings(String fritzboxAddress, String fritzboxPassword) {
     this.fritzboxAddress = fritzboxAddress;
@@ -31,6 +35,22 @@ public class UserSettings {
 
   public void setFritzboxPassword(String fritzboxPassword) {
     this.fritzboxPassword = fritzboxPassword;
+  }
+
+  public boolean isPeriodicalMissedCallsCheckEnabled() {
+    return enablePeriodicalMissedCallsCheck;
+  }
+
+  public void setEnablePeriodicalMissedCallsCheck(boolean enablePeriodicalMissedCallsCheck) {
+    this.enablePeriodicalMissedCallsCheck = enablePeriodicalMissedCallsCheck;
+  }
+
+  public long getPeriodicalMissedCallsCheckInterval() {
+    return periodicalMissedCallsCheckInterval;
+  }
+
+  public void setPeriodicalMissedCallsCheckInterval(long periodicalMissedCallsCheckInterval) {
+    this.periodicalMissedCallsCheckInterval = periodicalMissedCallsCheckInterval;
   }
 
 
