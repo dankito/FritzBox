@@ -3,6 +3,9 @@ apply plugin: 'java'
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
+// so that test resources (like testdata.properties) are copied to output
+sourceSets.test.output.resourcesDir = sourceSets.test.output.classesDir
+
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.21'
 
