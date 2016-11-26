@@ -16,9 +16,9 @@ import net.dankito.fritzbox.model.UserSettings;
 import net.dankito.fritzbox.utils.StringUtils;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by ganymed on 26/11/16.
@@ -26,7 +26,7 @@ import java.util.Locale;
 
 public class CallListAdapter extends BaseAdapter {
 
-  protected static final DateFormat CALL_DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+  protected static final DateFormat CALL_DATE_FORMAT = new SimpleDateFormat("HH:mm dd.MM.yy");
 
 
   protected Activity activity;
