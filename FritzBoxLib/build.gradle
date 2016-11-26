@@ -10,6 +10,7 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.21'
 
     compile 'com.squareup.okhttp3:okhttp:3.4.2'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
 
     testCompile 'junit:junit:4.12'
 }
