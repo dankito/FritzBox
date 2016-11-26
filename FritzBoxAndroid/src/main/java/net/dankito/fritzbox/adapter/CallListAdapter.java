@@ -98,7 +98,7 @@ public class CallListAdapter extends BaseAdapter {
 
     ImageView imgvwCallTypeIcon = (ImageView)convertView.findViewById(R.id.imgvwCallTypeIcon);
     Picasso.with(activity)
-        .load(getCallTypeIconUri(call.getType()))
+        .load(getCallTypeIcon(call.getType()))
         .into(imgvwCallTypeIcon);
 
     return convertView;
@@ -115,20 +115,20 @@ public class CallListAdapter extends BaseAdapter {
     return String.format("%d:%02d", hours, minutes);
   }
 
-  protected String getCallTypeIconUri(CallType type) {
-    String baseUri = "http://" + userSettings.getFritzBoxAddress() + "/css/default/images/";
-
-    if(type == CallType.INCOMMING_CALL) {
-      return baseUri + "callin.gif";
-    }
-    else if(type == CallType.OUTGOING_CALL) {
-      return baseUri + "callout.gif";
+  protected int getCallTypeIcon(CallType type) {
+    if(type == CallType.OUTGOING_CALL) {
+      return getIconId("@android:drawable/sym_call_outgoing");
     }
     else if(type == CallType.MISSED_CALL) {
-      return baseUri + "callinfailed.gif";
+      return getIconId("@android:drawable/sym_call_missed");
     }
+    else {
+      return getIconId("@android:drawable/sym_call_incoming");
+    }
+  }
 
-    return null;
+  protected int getIconId(String iconName) {
+    return activity.getResources().getIdentifier(iconName, null, null);
   }
 
 }
