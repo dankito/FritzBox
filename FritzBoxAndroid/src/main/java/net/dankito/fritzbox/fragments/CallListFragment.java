@@ -11,10 +11,12 @@ import android.widget.ListView;
 import net.dankito.fritzbox.MainActivity;
 import net.dankito.fritzbox.R;
 import net.dankito.fritzbox.adapter.CallListAdapter;
+import net.dankito.fritzbox.listener.CallListListener;
+import net.dankito.fritzbox.model.Call;
 import net.dankito.fritzbox.model.UserSettings;
-import net.dankito.fritzbox.services.FritzBoxClient;
-import net.dankito.fritzbox.utils.web.callbacks.GetCallListCallback;
-import net.dankito.fritzbox.utils.web.responses.GetCallListResponse;
+import net.dankito.fritzbox.services.CallListObserver;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -25,7 +27,7 @@ import javax.inject.Inject;
 public class CallListFragment extends Fragment {
 
   @Inject
-  protected FritzBoxClient fritzBoxClient;
+  protected CallListObserver callListObserver;
 
   @Inject
   protected UserSettings userSettings;
@@ -44,29 +46,19 @@ public class CallListFragment extends Fragment {
     ListView lstvwCallList = (ListView)view.findViewById(R.id.lstvwCallList);
     lstvwCallList.setAdapter(callListAdapter);
 
-    getCallList();
-
     return view;
-  }
-
-
-  protected void getCallList() {
-    fritzBoxClient.getCallListAsync(new GetCallListCallback() {
-      @Override
-      public void completed(GetCallListResponse response) {
-        if(response.isSuccessful() == false) {
-          // TODO: show error message
-        }
-        else {
-          callListAdapter.setCallListThreadSafe(response.getCallList());
-        }
-      }
-    });
   }
 
 
   protected void injectComponents() {
     ((MainActivity) getActivity()).getComponent().inject(this);
+
+    callListObserver.addCallListRetrievedListener(new CallListListener() {
+      @Override
+      public void callListUpdated(List<Call> callList) {
+        callListAdapter.setCallListThreadSafe(callList);
+      }
+    });
   }
 
 }
