@@ -53,7 +53,7 @@ public class FritzBoxClient {
   }
 
 
-  public void loginAsync(final String password, final LoginCallback callback) {
+  public void loginAsync(final LoginCallback callback) {
     this.getChallenge(new GetStringInfoCallback() {
       @Override
       public void completed(GetStringInfoResponse response) {
@@ -62,7 +62,7 @@ public class FritzBoxClient {
         }
         else {
           String challenge = response.getStringInfo();
-          sendLogin(challenge, password, new GetStringInfoCallback() {
+          sendLogin(challenge, userSettings.getFritzboxPassword(), new GetStringInfoCallback() {
             @Override
             public void completed(GetStringInfoResponse response) {
               loginCompleted(response, callback);
@@ -166,9 +166,9 @@ public class FritzBoxClient {
    * @throws IOException
    *             when an exception during communication occurred.
    */
-  public void getCallListAsync(String password, final GetCallListCallback callback) {
+  public void getCallListAsync(final GetCallListCallback callback) {
     if(isLoggedIn() == false) {
-      loginAsync(password, new LoginCallback() {
+      loginAsync(new LoginCallback() {
         @Override
         public void completed(LoginResponse response) {
           if(response.isSuccessful() == false) {

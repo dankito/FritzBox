@@ -57,7 +57,7 @@ public class FritzBoxClientTest {
     final List<LoginResponse> responseList = new ArrayList<>();
     final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    underTest.loginAsync(userSettings.getFritzboxPassword(), new LoginCallback() {
+    underTest.loginAsync(new LoginCallback() {
       @Override
       public void completed(LoginResponse response) {
         responseList.add(response);
@@ -79,7 +79,7 @@ public class FritzBoxClientTest {
     final List<GetCallListResponse> responseList = new ArrayList<>();
     final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    underTest.getCallListAsync(userSettings.getFritzboxPassword(), new GetCallListCallback() {
+    underTest.getCallListAsync(new GetCallListCallback() {
       @Override
       public void completed(GetCallListResponse response) {
         responseList.add(response);
