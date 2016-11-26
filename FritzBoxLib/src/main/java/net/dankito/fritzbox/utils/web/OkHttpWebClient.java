@@ -1,8 +1,8 @@
-package net.dankito.fritzbox.web;
+package net.dankito.fritzbox.utils.web;
 
-import net.dankito.fritzbox.web.callbacks.DownloadProgressListener;
-import net.dankito.fritzbox.web.callbacks.RequestCallback;
-import net.dankito.fritzbox.web.responses.WebClientResponse;
+import net.dankito.fritzbox.utils.web.callbacks.DownloadProgressListener;
+import net.dankito.fritzbox.utils.web.callbacks.RequestCallback;
+import net.dankito.fritzbox.utils.web.responses.WebClientResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

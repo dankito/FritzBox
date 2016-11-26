@@ -1,7 +1,7 @@
-package net.dankito.fritzbox.web;
+package net.dankito.fritzbox.utils.web;
 
-import net.dankito.fritzbox.web.callbacks.DownloadProgressListener;
-import net.dankito.stadtbibliothekmuenchen.util.StringUtils;
+import net.dankito.fritzbox.utils.StringUtils;
+import net.dankito.fritzbox.utils.web.callbacks.DownloadProgressListener;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

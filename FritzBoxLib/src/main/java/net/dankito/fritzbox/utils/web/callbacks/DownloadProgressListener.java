@@ -1,4 +1,4 @@
-package net.dankito.fritzbox.web.callbacks;
+package net.dankito.fritzbox.utils.web.callbacks;
 
 /**
  * Created by ganymed on 03/11/16.

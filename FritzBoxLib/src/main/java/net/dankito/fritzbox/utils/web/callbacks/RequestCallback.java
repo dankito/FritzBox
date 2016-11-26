@@ -1,6 +1,6 @@
-package net.dankito.fritzbox.web.callbacks;
+package net.dankito.fritzbox.utils.web.callbacks;
 
-import net.dankito.fritzbox.web.responses.WebClientResponse;
+import net.dankito.fritzbox.utils.web.responses.WebClientResponse;
 
 /**
  * Created by ganymed on 03/11/16.

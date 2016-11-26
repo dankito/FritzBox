@@ -1,4 +1,4 @@
-package net.dankito.fritzbox.web.responses;
+package net.dankito.fritzbox.utils.web.responses;
 
 /**
  * Created by ganymed on 02/11/16.
