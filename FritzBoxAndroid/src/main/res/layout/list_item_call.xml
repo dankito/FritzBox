@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/list_item_call_height">
+
+    <ImageView
+        android:id="@+id/imgvwCallTypeIcon"
+        android:layout_width="@dimen/list_item_call_type_icon_width"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="@dimen/list_item_call_type_icon_margin_right"
+    />
+
+    <TextView
+        android:id="@+id/txtvwCallerNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/imgvwCallTypeIcon"
+        android:layout_above="@+id/txtvwCallDuration"
+        android:layout_marginTop="@dimen/list_item_call_caller_number_margin_top"
+        android:gravity="center_vertical"
+        style="@android:style/TextAppearance.Large"
+    />
+
+    <TextView
+        android:id="@+id/txtvwCallDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/imgvwCallTypeIcon"
+        android:layout_toLeftOf="@+id/txtvwCallDate"
+        style="@android:style/TextAppearance.Medium"
+    />
+
+    <TextView
+        android:id="@+id/txtvwCallDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        style="@android:style/TextAppearance.Medium"
+    />
+
+</RelativeLayout>
