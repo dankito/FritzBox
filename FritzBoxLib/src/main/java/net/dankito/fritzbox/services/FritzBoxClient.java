@@ -62,7 +62,7 @@ public class FritzBoxClient {
         }
         else {
           String challenge = response.getStringInfo();
-          sendLogin(challenge, userSettings.getFritzboxPassword(), new GetStringInfoCallback() {
+          sendLogin(challenge, userSettings.getFritzBoxPassword(), new GetStringInfoCallback() {
             @Override
             public void completed(GetStringInfoResponse response) {
               loginCompleted(response, callback);
@@ -91,7 +91,7 @@ public class FritzBoxClient {
   }
 
   protected void getChallenge(final GetStringInfoCallback callback) {
-    String url = "http://" + userSettings.getFritzboxAddress() + "/login_sid.lua";
+    String url = "http://" + userSettings.getFritzBoxAddress() + "/login_sid.lua";
     webClient.getAsync(createDefaultRequestParameters(url), new RequestCallback() {
       @Override
       public void completed(WebClientResponse response) {
@@ -113,7 +113,7 @@ public class FritzBoxClient {
   protected void sendLogin(final String challenge, final String password, final GetStringInfoCallback callback) {
     try {
       final String loginChallengeResponse = calculateLoginChallengeResponse(challenge, password);
-      String url = "http://" + userSettings.getFritzboxAddress() + "/login_sid.lua?user=&response=" + loginChallengeResponse;
+      String url = "http://" + userSettings.getFritzBoxAddress() + "/login_sid.lua?user=&response=" + loginChallengeResponse;
 
       webClient.getAsync(createDefaultRequestParameters(url), new RequestCallback() {
         @Override
@@ -186,7 +186,7 @@ public class FritzBoxClient {
   }
 
   protected void doGetCallListAsync(final GetCallListCallback callback) {
-    String url = "http://" + userSettings.getFritzboxAddress() + "/fon_num/foncalls_list.lua?sid="+ this.sessionId + "&csv=";
+    String url = "http://" + userSettings.getFritzBoxAddress() + "/fon_num/foncalls_list.lua?sid="+ this.sessionId + "&csv=";
 
     webClient.getAsync(createDefaultRequestParameters(url), new RequestCallback() {
       @Override

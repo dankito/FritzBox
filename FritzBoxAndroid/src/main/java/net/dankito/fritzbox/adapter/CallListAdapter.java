@@ -116,7 +116,7 @@ public class CallListAdapter extends BaseAdapter {
   }
 
   protected String getCallTypeIconUri(CallType type) {
-    String baseUri = "http://" + userSettings.getFritzboxAddress() + "/css/default/images/";
+    String baseUri = "http://" + userSettings.getFritzBoxAddress() + "/css/default/images/";
 
     if(type == CallType.INCOMMING_CALL) {
       return baseUri + "callin.gif";

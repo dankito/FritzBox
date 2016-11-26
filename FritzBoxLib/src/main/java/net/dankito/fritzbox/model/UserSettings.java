@@ -1,40 +1,50 @@
 package net.dankito.fritzbox.model;
 
+import net.dankito.fritzbox.utils.StringUtils;
+
 /**
  * Created by ganymed on 26/11/16.
  */
 
 public class UserSettings {
 
-  protected String fritzboxAddress;
+  protected String fritzBoxAddress;
 
-  protected String fritzboxPassword;
+  protected String fritzBoxPassword;
 
   protected boolean enablePeriodicalMissedCallsCheck;
 
   protected long periodicalMissedCallsCheckInterval;
 
 
-  public UserSettings(String fritzboxAddress, String fritzboxPassword) {
-    this.fritzboxAddress = fritzboxAddress;
-    this.fritzboxPassword = fritzboxPassword;
+  public UserSettings(String fritzBoxAddress, String fritzBoxPassword) {
+    this.fritzBoxAddress = fritzBoxAddress;
+    this.fritzBoxPassword = fritzBoxPassword;
   }
 
 
-  public String getFritzboxAddress() {
-    return fritzboxAddress;
+  public boolean isFritzBoxAddressSet() {
+    return StringUtils.isNotNullOrEmpty(getFritzBoxAddress());
   }
 
-  public void setFritzboxAddress(String fritzboxAddress) {
-    this.fritzboxAddress = fritzboxAddress;
+  public String getFritzBoxAddress() {
+    return fritzBoxAddress;
   }
 
-  public String getFritzboxPassword() {
-    return fritzboxPassword;
+  public void setFritzBoxAddress(String fritzBoxAddress) {
+    this.fritzBoxAddress = fritzBoxAddress;
   }
 
-  public void setFritzboxPassword(String fritzboxPassword) {
-    this.fritzboxPassword = fritzboxPassword;
+  public boolean isFritzBoxPasswordSet() {
+    return StringUtils.isNotNullOrEmpty(getFritzBoxPassword());
+  }
+
+  public String getFritzBoxPassword() {
+    return fritzBoxPassword;
+  }
+
+  public void setFritzBoxPassword(String fritzBoxPassword) {
+    this.fritzBoxPassword = fritzBoxPassword;
   }
 
   public boolean isPeriodicalMissedCallsCheckEnabled() {
@@ -56,7 +66,7 @@ public class UserSettings {
 
   @Override
   public String toString() {
-    return getFritzboxAddress();
+    return getFritzBoxAddress();
   }
 
 }
