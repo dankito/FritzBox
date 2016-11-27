@@ -43,7 +43,7 @@ public class EncryptionService implements IEncryptionService {
       this.writer = Cipher.getInstance(TRANSFORMATION);
       this.reader = Cipher.getInstance(TRANSFORMATION);
 
-      InputStream inputStream = context.getResources().openRawResource(R.raw.a);
+      InputStream inputStream = context.getResources().openRawResource(R.raw.b);
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
       String a = bufferedReader.readLine();
       String b = bufferedReader.readLine();
