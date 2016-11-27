@@ -54,12 +54,16 @@ public class FritzBoxClient {
 
 
   public void loginAsync(final LoginCallback callback) {
-    if(userSettings.isFritzBoxAddressSet() == false || userSettings.isFritzBoxPasswordSet() == false) {
+    loginAsync(userSettings.getFritzBoxAddress(), userSettings.getFritzBoxPassword(), callback);
+  }
+
+  public void loginAsync(final String fritzBoxAddress, final String fritzBoxPassword, final LoginCallback callback) {
+    if(StringUtils.isNullOrEmpty(fritzBoxAddress) || StringUtils.isNullOrEmpty(fritzBoxPassword)) {
       callback.completed(new LoginResponse("Entweder FritzBox Adresse oder Password is nicht gesetzt")); // TODO: translate
       return;
     }
 
-    this.getChallenge(new GetStringInfoCallback() {
+    this.getChallenge(fritzBoxAddress, new GetStringInfoCallback() {
       @Override
       public void completed(GetStringInfoResponse response) {
         if(response.isSuccessful() == false) {
@@ -67,7 +71,7 @@ public class FritzBoxClient {
         }
         else {
           String challenge = response.getStringInfo();
-          sendLogin(challenge, userSettings.getFritzBoxPassword(), new GetStringInfoCallback() {
+          sendLogin(fritzBoxAddress, fritzBoxPassword, challenge, new GetStringInfoCallback() {
             @Override
             public void completed(GetStringInfoResponse response) {
               loginCompleted(response, callback);
@@ -95,8 +99,8 @@ public class FritzBoxClient {
     }
   }
 
-  protected void getChallenge(final GetStringInfoCallback callback) {
-    String url = "http://" + userSettings.getFritzBoxAddress() + "/login_sid.lua";
+  protected void getChallenge(String fritzBoxAddress, final GetStringInfoCallback callback) {
+    String url = "http://" + fritzBoxAddress + "/login_sid.lua";
     webClient.getAsync(createDefaultRequestParameters(url), new RequestCallback() {
       @Override
       public void completed(WebClientResponse response) {
@@ -115,10 +119,10 @@ public class FritzBoxClient {
     });
   }
 
-  protected void sendLogin(final String challenge, final String password, final GetStringInfoCallback callback) {
+  protected void sendLogin(String fritzBoxAddress, String fritzBoxPassword, String challenge, final GetStringInfoCallback callback) {
     try {
-      final String loginChallengeResponse = calculateLoginChallengeResponse(challenge, password);
-      String url = "http://" + userSettings.getFritzBoxAddress() + "/login_sid.lua?user=&response=" + loginChallengeResponse;
+      final String loginChallengeResponse = calculateLoginChallengeResponse(challenge, fritzBoxPassword);
+      String url = "http://" + fritzBoxAddress + "/login_sid.lua?user=&response=" + loginChallengeResponse;
 
       webClient.getAsync(createDefaultRequestParameters(url), new RequestCallback() {
         @Override
