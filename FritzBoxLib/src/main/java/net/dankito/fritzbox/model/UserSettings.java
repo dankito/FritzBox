@@ -17,6 +17,10 @@ public class UserSettings {
   protected long periodicalMissedCallsCheckInterval;
 
 
+  public UserSettings() { // for Jackson
+
+  }
+
   public UserSettings(String fritzBoxAddress, String fritzBoxPassword) {
     this.fritzBoxAddress = fritzBoxAddress;
     this.fritzBoxPassword = fritzBoxPassword;
