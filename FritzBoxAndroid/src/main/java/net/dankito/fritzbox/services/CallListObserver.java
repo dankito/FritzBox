@@ -123,6 +123,10 @@ public class CallListObserver {
   }
 
   protected void showCouldNotRetrieveCallListNotification(GetCallListResponse response) {
+    if(userSettings.isFritzBoxAddressSet() == false && userSettings.isFritzBoxPasswordSet() == false) { // start-up, settings not set yet
+      return;
+    }
+
     Resources resources = context.getResources();
     String title = resources.getString(R.string.notification_could_not_get_call_list);
     int iconId = resources.getIdentifier("@android:drawable/stat_notify_error", null, null);
