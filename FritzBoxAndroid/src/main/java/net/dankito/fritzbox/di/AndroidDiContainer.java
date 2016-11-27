@@ -101,9 +101,8 @@ public class AndroidDiContainer {
 
   @Provides
   @Singleton
-  public CallListObserver provideCallListObserver(FritzBoxClient fritzBoxClient, ICronService cronService, NotificationsService notificationsService,
-                                                  IFileStorageService fileStorageService, UserSettings userSettings, UserSettingsManager userSettingsManager) {
-    return new CallListObserver(getContext(), fritzBoxClient, cronService, notificationsService, fileStorageService, userSettings, userSettingsManager);
+  public CallListObserver provideCallListObserver() {
+    return new CallListObserver(getContext());
   }
 
 }

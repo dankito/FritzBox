@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
         android:name=".FritzBoxAndroidApplication"
         android:allowBackup="true"
@@ -30,6 +32,13 @@
                   />
 
         <receiver android:name=".services.AlarmManagerCronService" />
+
+        <receiver android:name=".services.CallListObserver"
+                  android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
 
     </application>
 
