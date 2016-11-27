@@ -104,21 +104,13 @@ public class CallListObserver extends BroadcastReceiver {
   }
 
   protected void startPeriodicalMissedCallsCheck(ICronService cronService, long periodicalMissedCallsCheckInterval) {
-    cronJobToken = cronService.startPeriodicalJob(periodicalMissedCallsCheckInterval, checkForMissedCallsRunnable);
+    cronJobToken = cronService.startPeriodicalJob(periodicalMissedCallsCheckInterval, CallListObserver.class);
   }
 
   protected void stopPeriodicalMissedCallsCheck() {
     cronService.cancelPeriodicalJob(cronJobToken);
     cronJobToken = CRON_JOB_TOKEN_NOT_SET;
   }
-
-  protected Runnable checkForMissedCallsRunnable = new Runnable() {
-    @Override
-    public void run() {
-      log.info("Running periodical missed call check ...");
-      getCallListAsync();
-    }
-  };
 
 
   protected void readStoredCallList() {
@@ -304,15 +296,28 @@ public class CallListObserver extends BroadcastReceiver {
   public void onReceive(Context context, Intent intent) {
     log.info("Received an Intent with action " + intent.getAction());
 
-    if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) { // Android system has booted
-      try {
-        setupDependencyInjection(context);
+    this.context = context;
+    setupDependencyInjection(context);
 
-        mayStartPeriodicalMissedCallsCheck();
-      } catch(Exception e) {
-        log.error("Could not start periodical missed call check on ACTION_BOOT_COMPLETED broadcast", e);
-      }
+    if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) { // Android system has booted
+      systemHasBooted(context);
     }
+    else { // fired by ICronService
+      periodToCheckForMissedCallsElapsed();
+    }
+  }
+
+  protected void systemHasBooted(Context context) {
+    try {
+      mayStartPeriodicalMissedCallsCheck();
+    } catch(Exception e) {
+      log.error("Could not start periodical missed call check on ACTION_BOOT_COMPLETED broadcast", e);
+    }
+  }
+
+  protected void periodToCheckForMissedCallsElapsed() {
+    log.info("Running periodical missed call check ...");
+    getCallListAsync();
   }
 
 }

@@ -60,24 +60,24 @@ public class AlarmManagerCronService extends BroadcastReceiver implements ICronS
   /**
    *
    * @param periodicalCheckTimeMillis
-   * @param runnableToExecute
+   * @param classThatReceivesBroadcastWhenPeriodElapsed
    * @return The cron job token number to uniquely identify started cron job
    */
-  public int startPeriodicalJob(long periodicalCheckTimeMillis, Runnable runnableToExecute) {
+  public int startPeriodicalJob(long periodicalCheckTimeMillis, Class<? extends BroadcastReceiver> classThatReceivesBroadcastWhenPeriodElapsed) {
     Calendar startTime = Calendar.getInstance();
     startTime.setTimeInMillis(System.currentTimeMillis());
     startTime.add(Calendar.MILLISECOND, (int)periodicalCheckTimeMillis);
 
-    return startPeriodicalJob(startTime, periodicalCheckTimeMillis, runnableToExecute);
+    return startPeriodicalJob(startTime, periodicalCheckTimeMillis, classThatReceivesBroadcastWhenPeriodElapsed);
   }
 
   /**
    *
    * @param startTime
-   * @param runnableToExecute
+   * @param classThatReceivesBroadcastWhenPeriodElapsed
    * @return The cron job token number to uniquely identify started cron job
    */
-  public int startPeriodicalJob(Calendar startTime, long intervalMillis, Runnable runnableToExecute) {
+  public int startPeriodicalJob(Calendar startTime, long intervalMillis, Class<? extends BroadcastReceiver> classThatReceivesBroadcastWhenPeriodElapsed) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeInMillis(System.currentTimeMillis());
     // if this time today has already passed, schedule for next day
@@ -93,14 +93,14 @@ public class AlarmManagerCronService extends BroadcastReceiver implements ICronS
     AlarmManager alarmManager = getAlarmManager();
     int tokenNumber = NextCronJobTokenNumber++;
 
-    Intent intent = new Intent(context, AlarmManagerCronService.class);
+    Intent intent = new Intent(context, classThatReceivesBroadcastWhenPeriodElapsed);
     intent.putExtra(CRON_JOB_TOKEN_NUMBER_EXTRA_NAME, tokenNumber);
     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, tokenNumber, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     alarmManager.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(),
         intervalMillis, pendingIntent);
 
-    startedJobs.put(tokenNumber, new CronJobInfo(runnableToExecute, pendingIntent));
+    startedJobs.put(tokenNumber, new CronJobInfo(null, pendingIntent));
 
     log.info("Started a periodical cron job with token number " + tokenNumber + " for " + calendar.getTime());
 
