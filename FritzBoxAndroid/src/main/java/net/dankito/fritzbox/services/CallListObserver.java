@@ -8,6 +8,7 @@ import net.dankito.fritzbox.listener.CallListListener;
 import net.dankito.fritzbox.model.Call;
 import net.dankito.fritzbox.model.CallType;
 import net.dankito.fritzbox.model.UserSettings;
+import net.dankito.fritzbox.services.listener.UserSettingsManagerListener;
 import net.dankito.fritzbox.utils.web.callbacks.GetCallListCallback;
 import net.dankito.fritzbox.utils.web.responses.GetCallListResponse;
 
@@ -31,6 +32,8 @@ public class CallListObserver {
 
   protected static final String MISSED_CALL_NOTIFICATION_TAG = "MissedCall";
 
+  protected static final int CRON_JOB_TOKEN_NOT_SET = -1;
+
 
   private static final Logger log = LoggerFactory.getLogger(CallListObserver.class);
 
@@ -47,19 +50,26 @@ public class CallListObserver {
 
   protected UserSettings userSettings;
 
+  protected UserSettingsManager userSettingsManager;
+
   protected List<Call> callList = new ArrayList<>();
+
+  protected int cronJobToken = CRON_JOB_TOKEN_NOT_SET;
 
   protected List<CallListListener> callListListeners = new CopyOnWriteArrayList<>();
 
 
   public CallListObserver(Context context, FritzBoxClient fritzBoxClient, ICronService cronService, NotificationsService notificationsService,
-                          IFileStorageService fileStorageService, UserSettings userSettings) {
+                          IFileStorageService fileStorageService, UserSettings userSettings, UserSettingsManager userSettingsManager) {
     this.context = context;
     this.fritzBoxClient = fritzBoxClient;
     this.cronService = cronService;
     this.notificationsService = notificationsService;
     this.fileStorageService = fileStorageService;
     this.userSettings = userSettings;
+    this.userSettingsManager = userSettingsManager;
+
+    userSettingsManager.addListener(userSettingsManagerListener);
 
     if(userSettings.isPeriodicalMissedCallsCheckEnabled() && userSettings.getPeriodicalMissedCallsCheckInterval() > 0) {
       startPeriodicalMissedCallsCheck(cronService, userSettings.getPeriodicalMissedCallsCheckInterval());
@@ -69,7 +79,12 @@ public class CallListObserver {
   }
 
   protected void startPeriodicalMissedCallsCheck(ICronService cronService, long periodicalMissedCallsCheckInterval) {
-    cronService.startPeriodicalJob(periodicalMissedCallsCheckInterval, checkForMissedCallsRunnable);
+    cronJobToken = cronService.startPeriodicalJob(periodicalMissedCallsCheckInterval, checkForMissedCallsRunnable);
+  }
+
+  protected void stopPeriodicalMissedCallsCheck() {
+    cronService.cancelPeriodicalJob(cronJobToken);
+    cronJobToken = CRON_JOB_TOKEN_NOT_SET;
   }
 
   protected Runnable checkForMissedCallsRunnable = new Runnable() {
@@ -191,6 +206,29 @@ public class CallListObserver {
     }
 
     return this.callList;
+  }
+
+
+  protected UserSettingsManagerListener userSettingsManagerListener = new UserSettingsManagerListener() {
+    @Override
+    public void userSettingsUpdated(UserSettings updatedSettings) {
+      getCallListAsync();
+
+      checkIfPeriodicCallListUpdateSettingsChanged(updatedSettings);
+    }
+  };
+
+  protected void checkIfPeriodicCallListUpdateSettingsChanged(UserSettings updatedSettings) {
+    if(updatedSettings.isPeriodicalMissedCallsCheckEnabled() == false && cronJobToken != CRON_JOB_TOKEN_NOT_SET) {
+      stopPeriodicalMissedCallsCheck();
+    }
+    else if(updatedSettings.isPeriodicalMissedCallsCheckEnabled()) {
+      if(cronJobToken != CRON_JOB_TOKEN_NOT_SET) {
+        stopPeriodicalMissedCallsCheck();
+      }
+
+      startPeriodicalMissedCallsCheck(cronService, updatedSettings.getPeriodicalMissedCallsCheckInterval());
+    }
   }
 
 
