@@ -1,8 +1,13 @@
 package net.dankito.fritzbox.services;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 
+import net.dankito.fritzbox.FritzBoxAndroidApplication;
 import net.dankito.fritzbox.R;
 import net.dankito.fritzbox.listener.CallListListener;
 import net.dankito.fritzbox.model.Call;
@@ -20,11 +25,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.inject.Inject;
+
 /**
  * Created by ganymed on 26/11/16.
  */
 
-public class CallListObserver {
+public class CallListObserver extends BroadcastReceiver {
 
   protected static final String CALL_LIST_FILENAME = "CallList.json";
 
@@ -40,16 +47,22 @@ public class CallListObserver {
 
   protected Context context;
 
+  @Inject
   protected FritzBoxClient fritzBoxClient;
 
+  @Inject
   protected ICronService cronService;
 
+  @Inject
   protected NotificationsService notificationsService;
 
+  @Inject
   protected IFileStorageService fileStorageService;
 
+  @Inject
   protected UserSettings userSettings;
 
+  @Inject
   protected UserSettingsManager userSettingsManager;
 
   protected List<Call> callList = new ArrayList<>();
@@ -59,23 +72,35 @@ public class CallListObserver {
   protected List<CallListListener> callListListeners = new CopyOnWriteArrayList<>();
 
 
-  public CallListObserver(Context context, FritzBoxClient fritzBoxClient, ICronService cronService, NotificationsService notificationsService,
-                          IFileStorageService fileStorageService, UserSettings userSettings, UserSettingsManager userSettingsManager) {
+  public CallListObserver() {
+    log.info("CallListObserver()");
+
+  }
+
+  public CallListObserver(Context context) {
+    log.info("CallListObserver(Context context)");
+
     this.context = context;
-    this.fritzBoxClient = fritzBoxClient;
-    this.cronService = cronService;
-    this.notificationsService = notificationsService;
-    this.fileStorageService = fileStorageService;
-    this.userSettings = userSettings;
-    this.userSettingsManager = userSettingsManager;
+
+    setupDependencyInjection(context);
+
+    mayStartPeriodicalMissedCallsCheck();
+
+    getCallListAsync();
+  }
+
+  protected void setupDependencyInjection(Context context) {
+    ((FritzBoxAndroidApplication)context.getApplicationContext()).getComponent().inject(this);
 
     userSettingsManager.addListener(userSettingsManagerListener);
 
+    readStoredCallList();
+  }
+
+  protected void mayStartPeriodicalMissedCallsCheck() {
     if(userSettings.isPeriodicalMissedCallsCheckEnabled() && userSettings.getPeriodicalMissedCallsCheckInterval() > 0) {
       startPeriodicalMissedCallsCheck(cronService, userSettings.getPeriodicalMissedCallsCheckInterval());
     }
-
-    readStoredCallListAndThenUpdate();
   }
 
   protected void startPeriodicalMissedCallsCheck(ICronService cronService, long periodicalMissedCallsCheckInterval) {
@@ -90,12 +115,13 @@ public class CallListObserver {
   protected Runnable checkForMissedCallsRunnable = new Runnable() {
     @Override
     public void run() {
+      log.info("Running periodical missed call check ...");
       getCallListAsync();
     }
   };
 
 
-  protected void readStoredCallListAndThenUpdate() {
+  protected void readStoredCallList() {
     try {
       this.callList = new ArrayList<>(Arrays.asList(fileStorageService.readObjectFromFile(CALL_LIST_FILENAME, Call[].class)));
 
@@ -103,8 +129,6 @@ public class CallListObserver {
     } catch(Exception e) {
       log.error("Could not read call list from file " + CALL_LIST_FILENAME, e);
     }
-
-    getCallListAsync();
   }
 
 
@@ -113,6 +137,9 @@ public class CallListObserver {
   }
 
   protected void getCallListAsync() {
+    int iconId = context.getResources().getIdentifier("@android:drawable/stat_notify_sync", null, null);
+    notificationsService.showNotification("Hole Anrufeliste", "Bin hier hart am arbeiten", iconId, "LIEBE");
+
     fritzBoxClient.getCallListAsync(new GetCallListCallback() {
       @Override
       public void completed(GetCallListResponse response) {
@@ -237,6 +264,19 @@ public class CallListObserver {
 
       startPeriodicalMissedCallsCheck(cronService, updatedSettings.getPeriodicalMissedCallsCheckInterval());
     }
+
+    setPeriodicalMissingCallsCheckOnBoot(updatedSettings.isPeriodicalMissedCallsCheckEnabled());
+  }
+
+  protected void setPeriodicalMissingCallsCheckOnBoot(boolean enablePeriodicalChecksOnBoot) {
+    ComponentName receiver = new ComponentName(context, CallListObserver.class);
+    PackageManager pm = context.getPackageManager();
+
+    int enableOrDisable = enablePeriodicalChecksOnBoot ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+
+    pm.setComponentEnabledSetting(receiver,
+        enableOrDisable,
+        PackageManager.DONT_KILL_APP);
   }
 
 
@@ -257,6 +297,22 @@ public class CallListObserver {
 
   public List<Call> getLastRetrievedCallList() {
     return callList;
+  }
+
+
+  @Override
+  public void onReceive(Context context, Intent intent) {
+    log.info("Received an Intent with action " + intent.getAction());
+
+    if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) { // Android system has booted
+      try {
+        setupDependencyInjection(context);
+
+        mayStartPeriodicalMissedCallsCheck();
+      } catch(Exception e) {
+        log.error("Could not start periodical missed call check on ACTION_BOOT_COMPLETED broadcast", e);
+      }
+    }
   }
 
 }
