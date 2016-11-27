@@ -54,8 +54,8 @@
 
         <TextView
             android:id="@+id/txtvwAddressLabel"
-            android:layout_width="@dimen/fragment_settings_labels_width"
-            android:layout_height="@dimen/fragment_settings_edit_texts_height"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fragment_settings_labels_height"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/txtvwHintFritzBoxAddressOrPasswordNotSet"
@@ -70,13 +70,14 @@
             android:layout_height="@dimen/fragment_settings_edit_texts_height"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/fragment_settings_edit_texts_bottom_margin"
             android:layout_below="@id/txtvwAddressLabel"
         />
 
         <TextView
             android:id="@+id/txtvwPasswordLabel"
-            android:layout_width="@dimen/fragment_settings_labels_width"
-            android:layout_height="@dimen/fragment_settings_edit_texts_height"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fragment_settings_labels_height"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/edtxtAddress"
@@ -92,6 +93,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_below="@id/txtvwPasswordLabel"
+            android:layout_marginBottom="@dimen/fragment_settings_edit_texts_bottom_margin"
             android:inputType="textPassword"
         />
 
