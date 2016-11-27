@@ -6,8 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import net.dankito.fritzbox.model.CronJobInfo;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +24,7 @@ public class AlarmManagerCronService implements ICronService {
   private static final Logger log = LoggerFactory.getLogger(AlarmManagerCronService.class);
 
 
-  protected static Map<Integer, CronJobInfo> startedJobs = new ConcurrentHashMap<>();
+  protected static Map<Integer, PendingIntent> startedJobs = new ConcurrentHashMap<>();
 
   protected static int NextCronJobTokenNumber = 1;
 
@@ -87,7 +85,7 @@ public class AlarmManagerCronService implements ICronService {
     alarmManager.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(),
         intervalMillis, pendingIntent);
 
-    startedJobs.put(tokenNumber, new CronJobInfo(null, pendingIntent));
+    startedJobs.put(tokenNumber, pendingIntent);
 
     log.info("Started a periodical cron job with token number " + tokenNumber + " for " + calendar.getTime());
 
@@ -97,10 +95,9 @@ public class AlarmManagerCronService implements ICronService {
 
   public boolean cancelPeriodicalJob(int cronJobTokenNumber) {
     log.info("Trying to cancel cron job with token number " + cronJobTokenNumber);
-    CronJobInfo cronJobInfo = startedJobs.remove(cronJobTokenNumber);
+    PendingIntent pendingIntent = startedJobs.remove(cronJobTokenNumber);
 
-    if(cronJobInfo != null && cronJobInfo.getPendingIntent() != null) {
-      PendingIntent pendingIntent = cronJobInfo.getPendingIntent();
+    if(pendingIntent != null) {
       AlarmManager alarmManager = getAlarmManager();
 
       alarmManager.cancel(pendingIntent);
