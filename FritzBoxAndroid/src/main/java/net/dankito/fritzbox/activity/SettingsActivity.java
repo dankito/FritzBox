@@ -7,6 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -41,6 +43,12 @@ public class SettingsActivity extends AppCompatActivity {
 
   protected EditText edtxtPassword;
 
+  protected CheckBox chkbxPeriodicallyCheckForMissedCalls;
+
+  protected TextView txtvwEveryLabel;
+  protected EditText edtxtPeriodicalMissedCallsCheckInterval;
+  protected TextView txtvwMinutesLabel;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +75,16 @@ public class SettingsActivity extends AppCompatActivity {
 
     Button btnTestFritzBoxSettings = (Button)findViewById(R.id.btnTestFritzBoxSettings);
     btnTestFritzBoxSettings.setOnClickListener(btnTestFritzBoxSettingsClickListener);
+
+    txtvwEveryLabel = (TextView)findViewById(R.id.txtvwEveryLabel);
+    txtvwMinutesLabel = (TextView)findViewById(R.id.txtvwMinutesLabel);
+
+    edtxtPeriodicalMissedCallsCheckInterval = (EditText)findViewById(R.id.edtxtPeriodicalMissedCallsCheckInterval);
+    edtxtPeriodicalMissedCallsCheckInterval.setText("" + (userSettings.getPeriodicalMissedCallsCheckInterval() / 1000 / 60));
+
+    chkbxPeriodicallyCheckForMissedCalls = (CheckBox)findViewById(R.id.chkbxPeriodicallyCheckForMissedCalls);
+    chkbxPeriodicallyCheckForMissedCalls.setOnCheckedChangeListener(chkbxPeriodicallyCheckForMissedCallsCheckedChangeListener);
+    chkbxPeriodicallyCheckForMissedCalls.setChecked(userSettings.isPeriodicalMissedCallsCheckEnabled());
 
     Button btnOk = (Button)findViewById(R.id.btnOk);
     btnOk.setOnClickListener(btnOkClickListener);
@@ -131,6 +149,12 @@ public class SettingsActivity extends AppCompatActivity {
     userSettings.setFritzBoxAddress(edtxtAddress.getText().toString());
     userSettings.setFritzBoxPassword(edtxtPassword.getText().toString());
 
+    userSettings.setEnablePeriodicalMissedCallsCheck(chkbxPeriodicallyCheckForMissedCalls.isChecked());
+    try {
+      int periodInMinutes = Integer.parseInt(edtxtPeriodicalMissedCallsCheckInterval.getText().toString());
+      userSettings.setPeriodicalMissedCallsCheckInterval(periodInMinutes * 60 * 1000);
+    } catch(Exception shouldNeverOccur) { }
+
     try {
       userSettingsManager.saveUserSettings(userSettings);
     } catch(Exception e) {
@@ -143,6 +167,15 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onClick(View view) {
       testFritzBoxSettings();
+    }
+  };
+
+  protected CompoundButton.OnCheckedChangeListener chkbxPeriodicallyCheckForMissedCallsCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+      edtxtPeriodicalMissedCallsCheckInterval.setEnabled(checked);
+      txtvwEveryLabel.setEnabled(checked);
+      txtvwMinutesLabel.setEnabled(checked);
     }
   };
 

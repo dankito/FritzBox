@@ -103,8 +103,70 @@
             android:layout_height="@dimen/fragment_settings_buttons_height"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/edtxtPassword"
+            android:layout_marginBottom="@dimen/fragment_settings_sections_margin"
             android:text="@string/test"
         />
+
+        <CheckBox
+            android:id="@+id/chkbxPeriodicallyCheckForMissedCalls"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fragment_settings_edit_texts_height"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/btnTestFritzBoxSettings"
+            style="@android:style/TextAppearance.Medium"
+            android:text="@string/fragment_setting_periodically_check_for_missed_calls"
+        />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/fragment_settings_edit_texts_height"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/chkbxPeriodicallyCheckForMissedCalls"
+        >
+
+            <TextView
+                android:id="@+id/txtvwEveryLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/edtxtPeriodicalMissedCallsCheckInterval"
+                android:gravity="center_vertical"
+                style="@android:style/TextAppearance.Medium"
+                android:text="@string/every"
+                android:enabled="false"
+            />
+
+            <EditText
+                android:id="@+id/edtxtPeriodicalMissedCallsCheckInterval"
+                android:layout_width="@dimen/fragment_settings_edit_text_periodical_missed_calls_check_interval_width"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/txtvwMinutesLabel"
+                android:gravity="center_vertical|right"
+                android:layout_marginLeft="@dimen/fragment_settings_edit_text_periodical_missed_calls_check_interval__vertical_margin"
+                android:layout_marginRight="@dimen/fragment_settings_edit_text_periodical_missed_calls_check_interval__vertical_margin"
+                android:inputType="number"
+                android:enabled="false"
+            />
+
+            <TextView
+                android:id="@+id/txtvwMinutesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                style="@android:style/TextAppearance.Medium"
+                android:text="@string/minutes"
+                android:enabled="false"
+            />
+
+        </RelativeLayout>
 
 
         <Button

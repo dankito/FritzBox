@@ -8,6 +8,9 @@
     <dimen name="fragment_settings_edit_texts_bottom_margin">6dp</dimen>
     <dimen name="fragment_settings_buttons_width">130dp</dimen>
     <dimen name="fragment_settings_buttons_height">60dp</dimen>
+    <dimen name="fragment_settings_checkboxes_height">40dp</dimen>
+    <dimen name="fragment_settings_edit_text_periodical_missed_calls_check_interval_width">60dp</dimen>
+    <dimen name="fragment_settings_edit_text_periodical_missed_calls_check_interval__vertical_margin">12dp</dimen>
     <dimen name="fragment_settings_cancel_and_ok_button_margin">16dp</dimen>
     <dimen name="fragment_settings_sections_margin">12dp</dimen>
 
