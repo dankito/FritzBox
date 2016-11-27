@@ -8,13 +8,16 @@ import net.dankito.fritzbox.services.AndroidFileStorageService;
 import net.dankito.fritzbox.services.CallListObserver;
 import net.dankito.fritzbox.services.CsvParser;
 import net.dankito.fritzbox.services.DigestService;
+import net.dankito.fritzbox.services.EncryptionService;
 import net.dankito.fritzbox.services.FritzBoxClient;
 import net.dankito.fritzbox.services.ICronService;
 import net.dankito.fritzbox.services.ICsvParser;
 import net.dankito.fritzbox.services.IDigestService;
+import net.dankito.fritzbox.services.IEncryptionService;
 import net.dankito.fritzbox.services.IFileStorageService;
 import net.dankito.fritzbox.services.NotificationsService;
 import net.dankito.fritzbox.services.UserSettingsManager;
+import net.dankito.fritzbox.services.exceptions.EncryptionServiceException;
 import net.dankito.fritzbox.utils.web.IWebClient;
 import net.dankito.fritzbox.utils.web.OkHttpWebClient;
 
@@ -46,8 +49,8 @@ public class AndroidDiContainer {
 
   @Provides
   @Singleton
-  public UserSettingsManager provideUserSettingsManager(IFileStorageService fileStorageService) {
-    return new UserSettingsManager(fileStorageService);
+  public UserSettingsManager provideUserSettingsManager(IFileStorageService fileStorageService, IEncryptionService encryptionService) {
+    return new UserSettingsManager(fileStorageService, encryptionService);
   }
 
   @Provides
@@ -97,6 +100,12 @@ public class AndroidDiContainer {
   @Singleton
   public IFileStorageService provideFileStorageService() {
     return new AndroidFileStorageService(getContext());
+  }
+
+  @Provides
+  @Singleton
+  public IEncryptionService provideEncryptionService() throws EncryptionServiceException {
+    return new EncryptionService(getContext());
   }
 
   @Provides

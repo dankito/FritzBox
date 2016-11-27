@@ -1,5 +1,8 @@
 package net.dankito.fritzbox.services;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import net.dankito.fritzbox.model.UserSettings;
 import net.dankito.fritzbox.services.listener.UserSettingsManagerListener;
 
@@ -17,17 +20,27 @@ public class UserSettingsManager {
 
   protected IFileStorageService fileStorageService;
 
+  protected IEncryptionService encryptionService;
+
+  protected ObjectMapper mapper = new ObjectMapper();
+
   protected List<UserSettingsManagerListener> listeners = new CopyOnWriteArrayList<>();
 
 
-  public UserSettingsManager(IFileStorageService fileStorageService) {
+  public UserSettingsManager(IFileStorageService fileStorageService, IEncryptionService encryptionService) {
     this.fileStorageService = fileStorageService;
+    this.encryptionService = encryptionService;
+
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   }
 
 
   public UserSettings deserializeUserSettings() {
     try {
-      return fileStorageService.readObjectFromFile(USER_SETTINGS_FILENAME, UserSettings.class);
+      String encrypted = fileStorageService.readFromFile(USER_SETTINGS_FILENAME);
+      String json = encryptionService.decrypt(encrypted);
+
+      return mapper.readValue(json, UserSettings.class);
     } catch(Exception e) {
       return createDefaultUserSettings();
     }
@@ -44,7 +57,10 @@ public class UserSettingsManager {
 
 
   public void saveUserSettings(UserSettings userSettings) throws Exception {
-    fileStorageService.writeObjectToFile(userSettings, USER_SETTINGS_FILENAME);
+    String json = mapper.writeValueAsString(userSettings);
+    String encrypted = encryptionService.encrypt(json);
+
+    fileStorageService.writeToFile(encrypted, USER_SETTINGS_FILENAME);
 
     callListeners(userSettings);
   }
