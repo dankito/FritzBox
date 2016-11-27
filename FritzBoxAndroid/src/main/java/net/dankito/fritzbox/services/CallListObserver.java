@@ -35,6 +35,8 @@ public class CallListObserver extends BroadcastReceiver {
 
   protected static final String CALL_LIST_FILENAME = "CallList.json";
 
+  protected static final String GETTING_CALL_LIST_NOTIFICATION_TAG = "GettingCallListNotificationTag";
+
   protected static final String COULD_NOT_GET_CALL_LIST_NOTIFICATION_TAG = "CouldNotGetCallList";
 
   protected static final String MISSED_CALL_NOTIFICATION_TAG = "MissedCall";
@@ -130,11 +132,13 @@ public class CallListObserver extends BroadcastReceiver {
 
   protected void getCallListAsync() {
     int iconId = context.getResources().getIdentifier("@android:drawable/stat_notify_sync", null, null);
-    notificationsService.showNotification("Hole Anrufeliste", "Bin hier hart am arbeiten", iconId, "LIEBE");
+    notificationsService.showNotification("Hole Anrufeliste", "Bin hier hart am arbeiten", iconId, GETTING_CALL_LIST_NOTIFICATION_TAG);
 
     fritzBoxClient.getCallListAsync(new GetCallListCallback() {
       @Override
       public void completed(GetCallListResponse response) {
+        notificationsService.dismissNotification(GETTING_CALL_LIST_NOTIFICATION_TAG);
+
         if(response.isSuccessful() == false) {
           showCouldNotRetrieveCallListNotification(response);
         }
