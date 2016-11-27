@@ -1,5 +1,6 @@
 package net.dankito.fritzbox;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import net.dankito.fritzbox.activity.SettingsActivity;
 import net.dankito.fritzbox.adapter.MainActivityTabsAdapter;
 import net.dankito.fritzbox.model.UserSettings;
 
@@ -16,6 +18,9 @@ import javax.inject.Inject;
 public class MainActivity extends AppCompatActivity {
 
   protected MainActivityTabsAdapter tabsAdapter;
+
+  @Inject
+  protected UserSettings userSettings;
 
 
   @Override
@@ -26,12 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     setupUi();
 
-  protected void setupDependencyInjection() {
-    component = DaggerAndroidDiComponent.builder()
-        .androidDiContainer(new AndroidDiContainer(this))
-        .build();
-
-    component.inject(this);
+    checkIfUserSettingsAreSetUp();
   }
 
   protected void setupUi() {
@@ -48,6 +48,13 @@ public class MainActivity extends AppCompatActivity {
     tabLayout.setupWithViewPager(viewPager);
   }
 
+  protected void checkIfUserSettingsAreSetUp() {
+    if(userSettings.isFritzBoxAddressSet() == false || userSettings.isFritzBoxPasswordSet() == false) {
+      showSettingsDialog();
+    }
+  }
+
+
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -60,11 +67,17 @@ public class MainActivity extends AppCompatActivity {
 
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
+      showSettingsDialog();
       return true;
     }
 
     return super.onOptionsItemSelected(item);
   }
 
+
+  protected void showSettingsDialog() {
+    Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+    startActivity(intent);
+  }
 
 }
