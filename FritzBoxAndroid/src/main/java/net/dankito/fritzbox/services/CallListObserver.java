@@ -75,13 +75,10 @@ public class CallListObserver extends BroadcastReceiver {
 
 
   public CallListObserver() {
-    log.info("CallListObserver()");
 
   }
 
   public CallListObserver(Context context) {
-    log.info("CallListObserver(Context context)");
-
     this.context = context;
 
     setupDependencyInjection(context);
@@ -298,8 +295,6 @@ public class CallListObserver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    log.info("Received an Intent with action " + intent.getAction());
-
     this.context = context;
     setupDependencyInjection(context);
 
