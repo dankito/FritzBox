@@ -149,7 +149,7 @@ public class SettingsActivity extends AppCompatActivity {
     userSettings.setFritzBoxAddress(edtxtAddress.getText().toString());
     userSettings.setFritzBoxPassword(edtxtPassword.getText().toString());
 
-    userSettings.setEnablePeriodicalMissedCallsCheck(chkbxPeriodicallyCheckForMissedCalls.isChecked());
+    userSettings.setPeriodicalMissedCallsCheckEnabled(chkbxPeriodicallyCheckForMissedCalls.isChecked());
     try {
       int periodInMinutes = Integer.parseInt(edtxtPeriodicalMissedCallsCheckInterval.getText().toString());
       userSettings.setPeriodicalMissedCallsCheckInterval(periodInMinutes * 60 * 1000);

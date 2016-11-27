@@ -12,7 +12,7 @@ public class UserSettings {
 
   protected String fritzBoxPassword;
 
-  protected boolean enablePeriodicalMissedCallsCheck;
+  protected boolean isPeriodicalMissedCallsCheckEnabled;
 
   protected long periodicalMissedCallsCheckInterval;
 
@@ -52,11 +52,11 @@ public class UserSettings {
   }
 
   public boolean isPeriodicalMissedCallsCheckEnabled() {
-    return enablePeriodicalMissedCallsCheck;
+    return isPeriodicalMissedCallsCheckEnabled;
   }
 
-  public void setEnablePeriodicalMissedCallsCheck(boolean enablePeriodicalMissedCallsCheck) {
-    this.enablePeriodicalMissedCallsCheck = enablePeriodicalMissedCallsCheck;
+  public void setPeriodicalMissedCallsCheckEnabled(boolean periodicalMissedCallsCheckEnabled) {
+    isPeriodicalMissedCallsCheckEnabled = periodicalMissedCallsCheckEnabled;
   }
 
   public long getPeriodicalMissedCallsCheckInterval() {
