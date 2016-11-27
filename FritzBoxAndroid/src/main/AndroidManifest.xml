@@ -34,7 +34,7 @@
         <receiver android:name=".services.AlarmManagerCronService" />
 
         <receiver android:name=".services.CallListObserver"
-                  android:enabled="true">
+                  android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
