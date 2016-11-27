@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by ganymed on 26/11/16.
  */
 
-public class AlarmManagerCronService extends BroadcastReceiver implements ICronService {
+public class AlarmManagerCronService implements ICronService {
 
   protected static final String CRON_JOB_TOKEN_NUMBER_EXTRA_NAME = "CronJobTokenNumber";
 
@@ -41,19 +41,6 @@ public class AlarmManagerCronService extends BroadcastReceiver implements ICronS
 
   public AlarmManagerCronService(Context context) {
     this.context = context;
-  }
-
-
-  @Override
-  public void onReceive(Context context, Intent intent) {
-    int tokenNumber = intent.getIntExtra(CRON_JOB_TOKEN_NUMBER_EXTRA_NAME, -1);
-    log.info("Received intent for CronJob with token number " + tokenNumber);
-
-    CronJobInfo cronJobInfo = startedJobs.get(tokenNumber);
-    if(cronJobInfo != null && cronJobInfo.getRunnableToExecute() != null) {
-      Runnable runnableToExecute = cronJobInfo.getRunnableToExecute();
-      runnableToExecute.run();
-    }
   }
 
 

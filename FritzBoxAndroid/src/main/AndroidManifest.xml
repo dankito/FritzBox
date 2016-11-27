@@ -31,8 +31,6 @@
             android:theme="@style/AppTheme.NoActionBar"
                   />
 
-        <receiver android:name=".services.AlarmManagerCronService" />
-
         <receiver android:name=".services.CallListObserver"
                   android:enabled="false">
             <intent-filter>
