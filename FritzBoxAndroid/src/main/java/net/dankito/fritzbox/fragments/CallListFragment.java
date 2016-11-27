@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -34,6 +37,12 @@ public class CallListFragment extends Fragment {
 
   protected CallListAdapter callListAdapter;
 
+
+  public CallListFragment() {
+    setHasOptionsMenu(true);
+  }
+
+
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,7 +50,7 @@ public class CallListFragment extends Fragment {
 
     View view = inflater.inflate(R.layout.fragment_call_list, container, false);
 
-    callListAdapter = new CallListAdapter(getActivity(), userSettings, callListObserver.getCallList());
+    callListAdapter = new CallListAdapter(getActivity(), userSettings, callListObserver.getLastRetrievedCallList());
 
     ListView lstvwCallList = (ListView)view.findViewById(R.id.lstvwCallList);
     lstvwCallList.setAdapter(callListAdapter);
@@ -59,6 +68,31 @@ public class CallListFragment extends Fragment {
         callListAdapter.setCallListThreadSafe(callList);
       }
     });
+  }
+
+
+  @Override
+  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.menu_fragment_call_list, menu);
+
+    super.onCreateOptionsMenu(menu, inflater);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    int id = item.getItemId();
+
+    if(id == R.id.mnitmRefreshCallList) {
+      refreshCallList();
+      return true;
+    }
+    else {
+      return super.onOptionsItemSelected(item);
+    }
+  }
+
+  protected void refreshCallList() {
+    callListObserver.refreshCallList();
   }
 
 }

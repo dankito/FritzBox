@@ -2,6 +2,7 @@
     <string name="app_name">FritzBox</string>
     <string name="action_settings">Settings</string>
     <string name="test">Test</string>
+    <string name="refresh">Refresh</string>
     <string name="every">Every</string>
     <string name="minutes">Minutes</string>
 

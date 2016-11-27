@@ -108,6 +108,10 @@ public class CallListObserver {
   }
 
 
+  public void refreshCallList() {
+    getCallListAsync();
+  }
+
   protected void getCallListAsync() {
     fritzBoxClient.getCallListAsync(new GetCallListCallback() {
       @Override
@@ -251,7 +255,7 @@ public class CallListObserver {
   }
 
 
-  public List<Call> getCallList() {
+  public List<Call> getLastRetrievedCallList() {
     return callList;
   }
 

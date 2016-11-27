@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FritzBox</string>
     <string name="action_settings">Einstellungen</string>
+    <string name="refresh">Reneuern</string>
     <string name="test">Test</string>
     <string name="every">Alle</string>
     <string name="minutes">Minuten</string>
