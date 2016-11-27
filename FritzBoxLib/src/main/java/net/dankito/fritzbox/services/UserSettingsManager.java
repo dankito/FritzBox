@@ -34,7 +34,12 @@ public class UserSettingsManager {
   }
 
   protected UserSettings createDefaultUserSettings() {
-    return new UserSettings("", "");
+    UserSettings defaultSettings = new UserSettings("", "");
+
+    defaultSettings.setEnablePeriodicalMissedCallsCheck(false);
+    defaultSettings.setPeriodicalMissedCallsCheckInterval(2 * 60 * 1000); // every 2 minutes
+
+    return defaultSettings;
   }
 
 
