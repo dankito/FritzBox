@@ -13,6 +13,7 @@ import android.widget.TextView;
 import net.dankito.fritzbox.FritzBoxAndroidApplication;
 import net.dankito.fritzbox.R;
 import net.dankito.fritzbox.model.UserSettings;
+import net.dankito.fritzbox.services.UserSettingsManager;
 
 import javax.inject.Inject;
 
@@ -24,6 +25,13 @@ public class SettingsActivity extends AppCompatActivity {
 
   @Inject
   protected UserSettings userSettings;
+
+  @Inject
+  protected UserSettingsManager userSettingsManager;
+
+  protected EditText edtxtAddress;
+
+  protected EditText edtxtPassword;
 
 
   @Override
@@ -43,10 +51,10 @@ public class SettingsActivity extends AppCompatActivity {
       txtvwHintFritzBoxAddressOrPasswordNotSet.setVisibility(View.VISIBLE);
     }
 
-    EditText edtxtAddress = (EditText)findViewById(R.id.edtxtAddress);
+    edtxtAddress = (EditText)findViewById(R.id.edtxtAddress);
     edtxtAddress.setText(userSettings.getFritzBoxAddress());
 
-    EditText edtxtPassword = (EditText)findViewById(R.id.edtxtPassword);
+    edtxtPassword = (EditText)findViewById(R.id.edtxtPassword);
     edtxtPassword.setText(userSettings.getFritzBoxPassword());
 
     Button btnOk = (Button)findViewById(R.id.btnOk);
@@ -84,10 +92,22 @@ public class SettingsActivity extends AppCompatActivity {
   }
 
 
+  protected void saveUserSettings() {
+    userSettings.setFritzBoxAddress(edtxtAddress.getText().toString());
+    userSettings.setFritzBoxPassword(edtxtPassword.getText().toString());
+
+    try {
+      userSettingsManager.saveUserSettings(userSettings);
+    } catch(Exception e) {
+      // TODO: show error message to user
+    }
+  }
+
+
   protected View.OnClickListener btnOkClickListener = new View.OnClickListener() {
     @Override
     public void onClick(View view) {
-      // TODO: save changes
+      saveUserSettings();
       closeActivity();
     }
   };

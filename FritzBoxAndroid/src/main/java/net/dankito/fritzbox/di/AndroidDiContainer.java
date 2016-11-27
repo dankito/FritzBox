@@ -14,6 +14,7 @@ import net.dankito.fritzbox.services.ICsvParser;
 import net.dankito.fritzbox.services.IDigestService;
 import net.dankito.fritzbox.services.IFileStorageService;
 import net.dankito.fritzbox.services.NotificationsService;
+import net.dankito.fritzbox.services.UserSettingsManager;
 import net.dankito.fritzbox.utils.web.IWebClient;
 import net.dankito.fritzbox.utils.web.OkHttpWebClient;
 
@@ -27,8 +28,6 @@ import dagger.Provides;
  */
 @Module
 public class AndroidDiContainer {
-
-  protected final Activity activity;
 
 
   protected final Context context;
@@ -47,10 +46,14 @@ public class AndroidDiContainer {
 
   @Provides
   @Singleton
-  public UserSettings provideUserSettings() {
-    UserSettings settings = new UserSettings("", ""); // TODO: read from storage
+  public UserSettingsManager provideUserSettingsManager(IFileStorageService fileStorageService) {
+    return new UserSettingsManager(fileStorageService);
+  }
 
-    return settings;
+  @Provides
+  @Singleton
+  public UserSettings provideUserSettings(UserSettingsManager userSettingsManager) {
+    return userSettingsManager.deserializeUserSettings();
   }
 
   @Provides
