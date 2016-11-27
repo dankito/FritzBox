@@ -308,6 +308,8 @@ public class CallListObserver extends BroadcastReceiver {
 
   protected void systemHasBooted(Context context) {
     try {
+      getCallListAsync();
+
       mayStartPeriodicalMissedCallsCheck();
     } catch(Exception e) {
       log.error("Could not start periodical missed call check on ACTION_BOOT_COMPLETED broadcast", e);
