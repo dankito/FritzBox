@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class FritzBoxClientTest {
 
-  protected static final String TEST_DATA_FILENAME = "testdata.properties";
+  protected static final String TEST_DATA_FILENAME = "test_data.properties";
 
   protected static final String TEST_DATA_FRITZ_BOX_ADDRESS = "test.fritzbox.address";
 
