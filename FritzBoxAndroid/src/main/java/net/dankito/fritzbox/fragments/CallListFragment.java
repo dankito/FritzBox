@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import net.dankito.fritzbox.MainActivity;
+import net.dankito.fritzbox.FritzBoxAndroidApplication;
 import net.dankito.fritzbox.R;
 import net.dankito.fritzbox.adapter.CallListAdapter;
 import net.dankito.fritzbox.listener.CallListListener;
@@ -51,7 +51,7 @@ public class CallListFragment extends Fragment {
 
 
   protected void injectComponents() {
-    ((MainActivity) getActivity()).getComponent().inject(this);
+    ((FritzBoxAndroidApplication)getContext().getApplicationContext()).getComponent().inject(this);
 
     callListObserver.addCallListRetrievedListener(new CallListListener() {
       @Override

@@ -9,13 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import net.dankito.fritzbox.adapter.MainActivityTabsAdapter;
-import net.dankito.fritzbox.di.AndroidDiComponent;
-import net.dankito.fritzbox.di.AndroidDiContainer;
-import net.dankito.fritzbox.di.DaggerAndroidDiComponent;
+import net.dankito.fritzbox.model.UserSettings;
+
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
-
-  protected AndroidDiComponent component;
 
   protected MainActivityTabsAdapter tabsAdapter;
 
@@ -24,10 +22,9 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    setupDependencyInjection();
+    ((FritzBoxAndroidApplication)getApplicationContext()).getComponent().inject(this);
 
     setupUi();
-  }
 
   protected void setupDependencyInjection() {
     component = DaggerAndroidDiComponent.builder()
@@ -44,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
     tabsAdapter = new MainActivityTabsAdapter(this, getSupportFragmentManager());
 
-    // Set up the ViewPager with the sections adapter.
     ViewPager viewPager = (ViewPager)findViewById(R.id.viewPager);
     viewPager.setAdapter(tabsAdapter);
 
@@ -54,16 +50,12 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_main, menu);
     return true;
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
     int id = item.getItemId();
 
     //noinspection SimplifiableIfStatement
@@ -74,9 +66,5 @@ public class MainActivity extends AppCompatActivity {
     return super.onOptionsItemSelected(item);
   }
 
-
-  public AndroidDiComponent getComponent() {
-    return component;
-  }
 
 }

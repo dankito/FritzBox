@@ -1,6 +1,6 @@
 package net.dankito.fritzbox.di;
 
-import android.app.Activity;
+import android.content.Context;
 
 import net.dankito.fritzbox.model.UserSettings;
 import net.dankito.fritzbox.services.AlarmManagerCronService;
@@ -31,14 +31,17 @@ public class AndroidDiContainer {
   protected final Activity activity;
 
 
-  public AndroidDiContainer (Activity activity) {
-    this.activity = activity;
+  protected final Context context;
+
+
+  public AndroidDiContainer(Context context) {
+    this.context = context;
   }
 
 
   @Provides //scope is not necessary for parameters stored within the module
-  public Activity getActivity() {
-    return activity;
+  public Context getContext() {
+    return context;
   }
 
 
@@ -78,26 +81,26 @@ public class AndroidDiContainer {
   @Provides
   @Singleton
   public ICronService provideCronService() {
-    return new AlarmManagerCronService(getActivity());
+    return new AlarmManagerCronService(getContext());
   }
 
   @Provides
   @Singleton
   public NotificationsService provideNotificationsService() {
-    return new NotificationsService(getActivity());
+    return new NotificationsService(getContext());
   }
 
   @Provides
   @Singleton
   public IFileStorageService provideFileStorageService() {
-    return new AndroidFileStorageService(getActivity());
+    return new AndroidFileStorageService(getContext());
   }
 
   @Provides
   @Singleton
   public CallListObserver provideCallListObserver(FritzBoxClient fritzBoxClient, ICronService cronService, NotificationsService notificationsService,
                                                   IFileStorageService fileStorageService, UserSettings userSettings) {
-    return new CallListObserver(getActivity(), fritzBoxClient, cronService, notificationsService, fileStorageService, userSettings);
+    return new CallListObserver(getContext(), fritzBoxClient, cronService, notificationsService, fileStorageService, userSettings);
   }
 
 }
