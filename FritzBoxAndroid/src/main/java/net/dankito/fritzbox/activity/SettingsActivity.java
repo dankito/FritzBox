@@ -13,7 +13,11 @@ import android.widget.TextView;
 import net.dankito.fritzbox.FritzBoxAndroidApplication;
 import net.dankito.fritzbox.R;
 import net.dankito.fritzbox.model.UserSettings;
+import net.dankito.fritzbox.services.FritzBoxClient;
 import net.dankito.fritzbox.services.UserSettingsManager;
+import net.dankito.fritzbox.util.AlertHelper;
+import net.dankito.fritzbox.utils.web.callbacks.LoginCallback;
+import net.dankito.fritzbox.utils.web.responses.LoginResponse;
 
 import javax.inject.Inject;
 
@@ -28,6 +32,10 @@ public class SettingsActivity extends AppCompatActivity {
 
   @Inject
   protected UserSettingsManager userSettingsManager;
+
+  @Inject
+  protected FritzBoxClient fritzBoxClient;
+
 
   protected EditText edtxtAddress;
 
@@ -56,6 +64,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     edtxtPassword = (EditText)findViewById(R.id.edtxtPassword);
     edtxtPassword.setText(userSettings.getFritzBoxPassword());
+
+    Button btnTestFritzBoxSettings = (Button)findViewById(R.id.btnTestFritzBoxSettings);
+    btnTestFritzBoxSettings.setOnClickListener(btnTestFritzBoxSettingsClickListener);
 
     Button btnOk = (Button)findViewById(R.id.btnOk);
     btnOk.setOnClickListener(btnOkClickListener);
@@ -92,6 +103,30 @@ public class SettingsActivity extends AppCompatActivity {
   }
 
 
+  protected void testFritzBoxSettings() {
+    fritzBoxClient.loginAsync(edtxtAddress.getText().toString(), edtxtPassword.getText().toString(), new LoginCallback() {
+      @Override
+      public void completed(LoginResponse response) {
+        if(response.isSuccessful() == false) {
+          showTestingFritzBoxSettingsFailedMessage(response);
+        }
+        else {
+          showTestingFritzBoxSettingsSucceededMessage();
+        }
+      }
+    });
+  }
+
+  protected void showTestingFritzBoxSettingsFailedMessage(LoginResponse response) {
+    String title = getString(R.string.fragment_settings_testing_fritz_box_settings_failed_title);
+    AlertHelper.showMessageThreadSafe(this, response.getError(), title);
+  }
+
+  protected void showTestingFritzBoxSettingsSucceededMessage() {
+    AlertHelper.showMessageThreadSafe(this, getString(R.string.fragment_settings_testing_fritz_box_settings_succeeded));
+  }
+
+
   protected void saveUserSettings() {
     userSettings.setFritzBoxAddress(edtxtAddress.getText().toString());
     userSettings.setFritzBoxPassword(edtxtPassword.getText().toString());
@@ -103,6 +138,13 @@ public class SettingsActivity extends AppCompatActivity {
     }
   }
 
+
+  protected View.OnClickListener btnTestFritzBoxSettingsClickListener = new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+      testFritzBoxSettings();
+    }
+  };
 
   protected View.OnClickListener btnOkClickListener = new View.OnClickListener() {
     @Override

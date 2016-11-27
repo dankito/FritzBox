@@ -1,12 +1,15 @@
 <resources>
     <string name="app_name">FritzBox</string>
     <string name="action_settings">Settings</string>
+    <string name="test">Test</string>
 
     <string name="tab_title_call_list">Call list</string>
 
     <string name="fragment_settings_fritz_box_address_title">FritzBox Address</string>
     <string name="fragment_settings_fritz_box_password_title">FritzBox Admin Password</string>
     <string name="fragment_settings_hint_fritz_box_address_or_password_not_set">FritzBox address or password not set.\nWithout app cannot connect to FritzBox.</string>
+    <string name="fragment_settings_testing_fritz_box_settings_failed_title">Login to FritzBox failed</string>
+    <string name="fragment_settings_testing_fritz_box_settings_succeeded">Login success, settings are correct</string>
 
     <string name="notification_could_not_get_call_list">Could not get call list</string>
     <string name="notification_missed_call">Missed call</string>

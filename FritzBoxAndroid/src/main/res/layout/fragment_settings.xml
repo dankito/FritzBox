@@ -97,6 +97,15 @@
             android:inputType="textPassword"
         />
 
+        <Button
+            android:id="@+id/btnTestFritzBoxSettings"
+            android:layout_width="@dimen/fragment_settings_buttons_width"
+            android:layout_height="@dimen/fragment_settings_buttons_height"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/edtxtPassword"
+            android:text="@string/test"
+        />
+
 
         <Button
             android:id="@+id/btnOk"

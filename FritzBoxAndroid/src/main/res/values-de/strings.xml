@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FritzBox</string>
     <string name="action_settings">Einstellungen</string>
+    <string name="test">Test</string>
 
     <string name="tab_title_call_list">Anrufliste</string>
 
@@ -8,6 +9,8 @@
     <string name="fragment_settings_fritz_box_address_title">FritzBox Adresse</string>
     <string name="fragment_settings_fritz_box_password_title">FritzBox Admin Passwort</string>
     <string name="fragment_settings_hint_fritz_box_address_or_password_not_set">FritzBox Adresse oder Passwort ist nicht gesetzt.\nOhne ist keine Verbindung zur FritzBox möglich.</string>
+    <string name="fragment_settings_testing_fritz_box_settings_failed_title">Einloggen auf FritzBox fehlgeschlagen</string>
+    <string name="fragment_settings_testing_fritz_box_settings_succeeded">Einloggen erfolgreich, Einstellungen sind richtig</string>
 
     <string name="notification_could_not_get_call_list">Konnte Anrufliste nicht ermitteln</string>
     <string name="notification_missed_call">Verpasster Anruf</string>
