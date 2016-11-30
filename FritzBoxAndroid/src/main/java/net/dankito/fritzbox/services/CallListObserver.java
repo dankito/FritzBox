@@ -13,6 +13,7 @@ import net.dankito.fritzbox.R;
 import net.dankito.fritzbox.listener.CallListListener;
 import net.dankito.fritzbox.model.Call;
 import net.dankito.fritzbox.model.CallType;
+import net.dankito.fritzbox.model.NotificationConfig;
 import net.dankito.fritzbox.model.UserSettings;
 import net.dankito.fritzbox.services.listener.UserSettingsManagerListener;
 import net.dankito.fritzbox.utils.web.callbacks.GetCallListCallback;
@@ -166,7 +167,7 @@ public class CallListObserver extends BroadcastReceiver {
 
   protected void showGettingCallListNotification() {
     int iconId = context.getResources().getIdentifier("@android:drawable/stat_notify_sync", null, null);
-    notificationsService.showNotification("Hole Anrufeliste", "Bin hier hart am arbeiten", iconId, GETTING_CALL_LIST_NOTIFICATION_TAG);
+    notificationsService.showNotification(new NotificationConfig("Hole Anrufeliste", "Bin hier hart am arbeiten", iconId), GETTING_CALL_LIST_NOTIFICATION_TAG);
   }
 
   protected void getCallListAsyncCompleted(GetCallListResponse response) {
@@ -189,7 +190,7 @@ public class CallListObserver extends BroadcastReceiver {
     String title = resources.getString(R.string.notification_could_not_get_call_list);
     int iconId = resources.getIdentifier("@android:drawable/stat_notify_error", null, null);
 
-    notificationsService.showNotification(title, response.getError(), iconId, COULD_NOT_GET_CALL_LIST_NOTIFICATION_TAG);
+    notificationsService.showNotification(new NotificationConfig(title, response.getError(), iconId), COULD_NOT_GET_CALL_LIST_NOTIFICATION_TAG);
   }
 
   protected void retrievedCallList(GetCallListResponse response) {
@@ -231,7 +232,7 @@ public class CallListObserver extends BroadcastReceiver {
 
     String missedCallsText = createMissedCallsText(missedCalls);
 
-    notificationsService.showNotification(title, missedCallsText, iconId, MISSED_CALL_NOTIFICATION_TAG, true);
+    notificationsService.showNotification(new NotificationConfig(title, missedCallsText, iconId, true), MISSED_CALL_NOTIFICATION_TAG);
   }
 
   @NonNull

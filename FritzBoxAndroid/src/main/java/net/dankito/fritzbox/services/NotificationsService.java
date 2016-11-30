@@ -9,6 +9,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.app.NotificationCompat;
 
 import net.dankito.fritzbox.MainActivity;
+import net.dankito.fritzbox.model.NotificationConfig;
 import net.dankito.fritzbox.model.NotificationInfo;
 
 import java.util.Map;
@@ -33,15 +34,11 @@ public class NotificationsService {
   }
 
 
-  public void showNotification(String title, String text, int iconId) {
-    showNotification(title, text, iconId, null);
+  public void showNotification(NotificationConfig config) {
+    showNotification(config, null);
   }
 
-  public void showNotification(String title, String text, int iconId, String tag) {
-    showNotification(title, text, iconId, tag, false);
-  }
-
-  public void showNotification(String title, String text, int iconId, String tag, boolean isMultiLineText) {
+  public void showNotification(NotificationConfig config, String tag) {
     NotificationManager notificationManager = getNotificationManager();
 
     Intent intent = new Intent(context, MainActivity.class);
@@ -65,21 +62,7 @@ public class NotificationsService {
     PendingIntent pendingIntent = stackBuilder.getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT);
 //    PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, intent, 0);
 
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-        .setContentTitle(title)
-        .setSmallIcon(iconId)
-        .setContentIntent(pendingIntent)
-        .setAutoCancel(true)
-        ;
-
-    if(isMultiLineText) {
-      builder.setStyle(new NotificationCompat.BigTextStyle().bigText(text));
-    }
-    else {
-      builder.setContentText(text);
-    }
-
-    Notification notification = builder.build();
+    Notification notification = createNotification(config, pendingIntent);
 
     if(tag != null) {
       notificationManager.notify(tag, notificationId, notification);
@@ -88,6 +71,22 @@ public class NotificationsService {
     else {
       notificationManager.notify(notificationId, notification);
     }
+  }
+
+  protected Notification createNotification(NotificationConfig config, PendingIntent pendingIntent) {
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        .setContentTitle(config.getTitle())
+        .setContentText(config.getText())
+        .setSmallIcon(config.getIconId())
+        .setContentIntent(pendingIntent)
+        .setAutoCancel(true)
+        ;
+
+    if(config.isMultiLineText()) {
+      builder.setStyle(new NotificationCompat.BigTextStyle().bigText(config.getText()));
+    }
+
+    return builder.build();
   }
 
 
