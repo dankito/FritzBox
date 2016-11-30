@@ -249,7 +249,11 @@ public class CallListObserver extends BroadcastReceiver {
       else {
         missedCallsText += TIME_ONLY_MISSED_CALL_DATE_FORMAT.format(missedCall.getDate());
       }
-      missedCallsText += " " + missedCall.getCallerNumber() + "\n";
+      missedCallsText += "   " + missedCall.getCallerNumber() + "\n";
+    }
+
+    if(missedCallsText.length() > 0) {
+      missedCallsText = missedCallsText.substring(0, missedCallsText.length() - 1); // cut off last '\n'
     }
 
     return missedCallsText;
