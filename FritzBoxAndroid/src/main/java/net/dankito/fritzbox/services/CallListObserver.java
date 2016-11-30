@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -136,22 +138,46 @@ public class CallListObserver extends BroadcastReceiver {
   }
 
   protected void getCallListAsync() {
-    int iconId = context.getResources().getIdentifier("@android:drawable/stat_notify_sync", null, null);
-    notificationsService.showNotification("Hole Anrufeliste", "Bin hier hart am arbeiten", iconId, GETTING_CALL_LIST_NOTIFICATION_TAG);
+    showGettingCallListNotification();
 
     fritzBoxClient.getCallListAsync(new GetCallListCallback() {
       @Override
       public void completed(GetCallListResponse response) {
-        notificationsService.dismissNotification(GETTING_CALL_LIST_NOTIFICATION_TAG);
-
-        if(response.isSuccessful() == false) {
-          showCouldNotRetrieveCallListNotification(response);
-        }
-        else {
-          retrievedCallList(response);
-        }
+        getCallListAsyncCompleted(response);
       }
     });
+  }
+
+  protected void getCallListSynchronous() {
+    showGettingCallListNotification();
+
+    final CountDownLatch countDownLatch = new CountDownLatch(1);
+
+    fritzBoxClient.getCallListAsync(new GetCallListCallback() {
+      @Override
+      public void completed(GetCallListResponse response) {
+        getCallListAsyncCompleted(response);
+        countDownLatch.countDown();
+      }
+    });
+
+    try { countDownLatch.await(30, TimeUnit.SECONDS); } catch(Exception e) { }
+  }
+
+  protected void showGettingCallListNotification() {
+    int iconId = context.getResources().getIdentifier("@android:drawable/stat_notify_sync", null, null);
+    notificationsService.showNotification("Hole Anrufeliste", "Bin hier hart am arbeiten", iconId, GETTING_CALL_LIST_NOTIFICATION_TAG);
+  }
+
+  protected void getCallListAsyncCompleted(GetCallListResponse response) {
+    notificationsService.dismissNotification(GETTING_CALL_LIST_NOTIFICATION_TAG);
+
+    if(response.isSuccessful() == false) {
+      showCouldNotRetrieveCallListNotification(response);
+    }
+    else {
+      retrievedCallList(response);
+    }
   }
 
   protected void showCouldNotRetrieveCallListNotification(GetCallListResponse response) {
@@ -336,7 +362,7 @@ public class CallListObserver extends BroadcastReceiver {
 
   protected void systemHasBooted(Context context) {
     try {
-      getCallListAsync();
+      getCallListSynchronous();
 
       mayStartPeriodicalMissedCallsCheck();
     } catch(Exception e) {
@@ -346,7 +372,7 @@ public class CallListObserver extends BroadcastReceiver {
 
   protected void periodToCheckForMissedCallsElapsed() {
     log.info("Running periodical missed call check ...");
-    getCallListAsync();
+    getCallListSynchronous();
   }
 
 }
