@@ -6,7 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 
 import net.dankito.fritzbox.MainActivity;
 import net.dankito.fritzbox.model.NotificationInfo;
@@ -38,6 +38,10 @@ public class NotificationsService {
   }
 
   public void showNotification(String title, String text, int iconId, String tag) {
+    showNotification(title, text, iconId, tag, false);
+  }
+
+  public void showNotification(String title, String text, int iconId, String tag, boolean isMultiLineText) {
     NotificationManager notificationManager = getNotificationManager();
 
     Intent intent = new Intent(context, MainActivity.class);
@@ -61,13 +65,21 @@ public class NotificationsService {
     PendingIntent pendingIntent = stackBuilder.getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT);
 //    PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, intent, 0);
 
-    Notification notification = new NotificationCompat.Builder(context)
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
         .setContentTitle(title)
-        .setContentText(text)
         .setSmallIcon(iconId)
         .setContentIntent(pendingIntent)
         .setAutoCancel(true)
-        .build();
+        ;
+
+    if(isMultiLineText) {
+      builder.setStyle(new NotificationCompat.BigTextStyle().bigText(text));
+    }
+    else {
+      builder.setContentText(text);
+    }
+
+    Notification notification = builder.build();
 
     if(tag != null) {
       notificationManager.notify(tag, notificationId, notification);
