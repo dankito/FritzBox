@@ -231,7 +231,7 @@ public class CallListObserver extends BroadcastReceiver {
 
     String missedCallsText = createMissedCallsText(missedCalls);
 
-    notificationsService.showNotification(title, missedCallsText, iconId, MISSED_CALL_NOTIFICATION_TAG);
+    notificationsService.showNotification(title, missedCallsText, iconId, MISSED_CALL_NOTIFICATION_TAG, true);
   }
 
   @NonNull
