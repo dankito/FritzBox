@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 
 import net.dankito.fritzbox.FritzBoxAndroidApplication;
 import net.dankito.fritzbox.R;
@@ -20,8 +21,11 @@ import net.dankito.fritzbox.utils.web.responses.GetCallListResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -42,6 +46,10 @@ public class CallListObserver extends BroadcastReceiver {
   protected static final String MISSED_CALL_NOTIFICATION_TAG = "MissedCall";
 
   protected static final int CRON_JOB_TOKEN_NOT_SET = -1;
+
+  protected static final DateFormat TIME_ONLY_MISSED_CALL_DATE_FORMAT = new SimpleDateFormat("HH:mm"); // TODO: make international
+
+  protected static final DateFormat TIME_AND_DATE_MISSED_CALL_DATE_FORMAT = new SimpleDateFormat("dd.MM HH:mm");
 
 
   private static final Logger log = LoggerFactory.getLogger(CallListObserver.class);
@@ -195,12 +203,30 @@ public class CallListObserver extends BroadcastReceiver {
     String title = resources.getString(R.string.notification_missed_call);
     int iconId = resources.getIdentifier("@android:drawable/stat_notify_missed_call", null, null);
 
-    String missedCallsText = "";
-    for(Call missedCall : missedCalls) {
-      missedCallsText += missedCall.getCallerNumber() + "\n";
-    }
+    String missedCallsText = createMissedCallsText(missedCalls);
 
     notificationsService.showNotification(title, missedCallsText, iconId, MISSED_CALL_NOTIFICATION_TAG);
+  }
+
+  @NonNull
+  protected String createMissedCallsText(List<Call> missedCalls) {
+    String missedCallsText = "";
+    int todaysDayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+
+    for(Call missedCall : missedCalls) {
+      Calendar dayOfCall = Calendar.getInstance();
+      dayOfCall.setTime(missedCall.getDate());
+
+      if(todaysDayOfMonth != dayOfCall.get(Calendar.DAY_OF_MONTH)) {
+        missedCallsText += TIME_AND_DATE_MISSED_CALL_DATE_FORMAT.format(missedCall.getDate());
+      }
+      else {
+        missedCallsText += TIME_ONLY_MISSED_CALL_DATE_FORMAT.format(missedCall.getDate());
+      }
+      missedCallsText += " " + missedCall.getCallerNumber() + "\n";
+    }
+
+    return missedCallsText;
   }
 
   protected void handleCallListUpdate(GetCallListResponse response, List<Call> newlyRetrievedCalls) {
