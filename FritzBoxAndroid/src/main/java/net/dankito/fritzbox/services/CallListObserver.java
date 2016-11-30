@@ -159,6 +159,8 @@ public class CallListObserver extends BroadcastReceiver {
   }
 
   protected void retrievedCallList(GetCallListResponse response) {
+    notificationsService.dismissNotification(COULD_NOT_GET_CALL_LIST_NOTIFICATION_TAG); // dismiss if there has been any
+
     List<Call> newlyRetrievedCalls = response.getCallList();
     List<Call> missedCalls = getNewMissedCalls(newlyRetrievedCalls);
 
