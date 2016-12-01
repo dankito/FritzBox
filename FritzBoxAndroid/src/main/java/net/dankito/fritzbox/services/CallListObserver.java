@@ -232,7 +232,10 @@ public class CallListObserver extends BroadcastReceiver {
 
     String missedCallsText = createMissedCallsText(missedCalls);
 
-    notificationsService.showNotification(new NotificationConfig(title, missedCallsText, iconId, true), MISSED_CALL_NOTIFICATION_TAG);
+    NotificationConfig config = new NotificationConfig(title, missedCallsText, iconId, true);
+    config.setLetLedBlink(0xFF0000FF, 400, 500);
+
+    notificationsService.showNotification(config, MISSED_CALL_NOTIFICATION_TAG);
   }
 
   @NonNull
