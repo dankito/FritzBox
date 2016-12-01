@@ -86,6 +86,10 @@ public class NotificationsService {
       builder.setStyle(new NotificationCompat.BigTextStyle().bigText(config.getText()));
     }
 
+    if(config.letLedBlink()) {
+      builder.setLights(config.getLedArgb(), config.getLedOnMillis(), config.getLedOffMillis());
+    }
+
     return builder.build();
   }
 
