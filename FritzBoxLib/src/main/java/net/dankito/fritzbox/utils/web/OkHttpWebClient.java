@@ -253,7 +253,7 @@ public class OkHttpWebClient implements IWebClient {
   }
 
   protected boolean isConnectionException(Exception e) {
-    String errorMessage = e.getMessage().toLowerCase();
+    String errorMessage = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
     return errorMessage.contains("timeout") || errorMessage.contains("failed to connect");
   }
 
