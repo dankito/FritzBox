@@ -5,12 +5,19 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.dankito.fritzbox.MainActivity;
 import net.dankito.fritzbox.model.NotificationConfig;
 import net.dankito.fritzbox.model.NotificationInfo;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,16 +28,26 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class NotificationsService {
 
-  protected static int nextNotificationId = 1;
+  protected static final String CURRENTLY_SHOWING_NOTIFICATIONS_FILENAME = "CurrentlyShownNotifications.json";
 
-  protected static Map<String, NotificationInfo> currentlyShowingNotifications = new ConcurrentHashMap<>();
+  private static final Logger log = LoggerFactory.getLogger(NotificationsService.class);
+
+
+  protected static int nextNotificationId = 1;
 
 
   protected Context context;
 
+  protected IFileStorageService fileStorageService;
 
-  public NotificationsService(Context context) {
+  protected Map<String, NotificationInfo> currentlyShowingNotifications = new ConcurrentHashMap<>();
+
+
+  public NotificationsService(Context context, IFileStorageService fileStorageService) {
     this.context = context;
+    this.fileStorageService = fileStorageService;
+
+    loadCurrentlyShowingNotifications();
   }
 
 
@@ -66,7 +83,7 @@ public class NotificationsService {
 
     if(tag != null) {
       notificationManager.notify(tag, notificationId, notification);
-      currentlyShowingNotifications.put(tag, new NotificationInfo(notificationId, tag));
+      addToCurrentlyShowingNotifications(notificationId, tag);
     }
     else {
       notificationManager.notify(notificationId, notification);
@@ -96,7 +113,7 @@ public class NotificationsService {
 
   public boolean dismissNotification(String notificationTag) {
     if(notificationTag != null && currentlyShowingNotifications.containsKey(notificationTag)) {
-      NotificationInfo notificationInfo = currentlyShowingNotifications.remove(notificationTag);
+      NotificationInfo notificationInfo = removeFromCurrentlyShowingNotifications(notificationTag);
       NotificationManager notificationManager = getNotificationManager();
 
       notificationManager.cancel(notificationInfo.getTag(), notificationInfo.getNotificationId());
@@ -104,6 +121,43 @@ public class NotificationsService {
     }
 
     return false;
+  }
+
+
+  protected void addToCurrentlyShowingNotifications(int notificationId, String notificationTag) {
+    NotificationInfo addedNotification = new NotificationInfo(notificationId, notificationTag);
+
+    currentlyShowingNotifications.put(notificationTag, addedNotification);
+
+    saveCurrentlyShowingNotifications();
+  }
+
+  protected NotificationInfo removeFromCurrentlyShowingNotifications(String notificationTag) {
+    NotificationInfo removedNotification = currentlyShowingNotifications.remove(notificationTag);
+
+    saveCurrentlyShowingNotifications();
+
+    return removedNotification;
+  }
+
+  protected void loadCurrentlyShowingNotifications() {
+    try {
+      String json = fileStorageService.readFromFile(CURRENTLY_SHOWING_NOTIFICATIONS_FILENAME);
+      ObjectMapper mapper = new ObjectMapper();
+      mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+      currentlyShowingNotifications = mapper.readValue(json, new TypeReference<ConcurrentHashMap<String, NotificationInfo>>(){ } );
+    } catch(Exception e) {
+      log.error("Could not load " + CURRENTLY_SHOWING_NOTIFICATIONS_FILENAME, e);
+    }
+  }
+
+  protected void saveCurrentlyShowingNotifications() {
+    try {
+      fileStorageService.writeObjectToFile(currentlyShowingNotifications, CURRENTLY_SHOWING_NOTIFICATIONS_FILENAME);
+    } catch(Exception e) {
+      log.error("Could not write currently showing notifications to file " + CURRENTLY_SHOWING_NOTIFICATIONS_FILENAME, e);
+    }
   }
 
 

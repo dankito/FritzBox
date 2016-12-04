@@ -11,6 +11,10 @@ public class NotificationInfo {
   protected String tag;
 
 
+  public NotificationInfo() { // for Jackson
+
+  }
+
   public NotificationInfo(int notificationId) {
     this.notificationId = notificationId;
   }

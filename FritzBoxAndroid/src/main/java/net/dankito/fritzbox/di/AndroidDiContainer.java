@@ -92,8 +92,8 @@ public class AndroidDiContainer {
 
   @Provides
   @Singleton
-  public NotificationsService provideNotificationsService() {
-    return new NotificationsService(getContext());
+  public NotificationsService provideNotificationsService(IFileStorageService fileStorageService) {
+    return new NotificationsService(getContext(), fileStorageService);
   }
 
   @Provides
