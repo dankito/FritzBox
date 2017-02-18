@@ -22,7 +22,8 @@ public class AndroidNetworkService implements INetworkService {
     WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
     if(wifiManager != null && wifiManager.getConnectionInfo() != null) {
       WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-      return wifiInfo.getSSID();
+
+      return wifiInfo.getSSID().replace("\"", "");
     }
 
     return null;
