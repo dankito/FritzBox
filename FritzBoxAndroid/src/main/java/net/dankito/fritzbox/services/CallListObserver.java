@@ -78,6 +78,10 @@ public class CallListObserver extends BroadcastReceiver {
   @Inject
   protected UserSettingsManager userSettingsManager;
 
+  @Inject
+  protected INetworkService networkService;
+
+
   protected List<Call> callList = new ArrayList<>();
 
   protected int cronJobToken = CRON_JOB_TOKEN_NOT_SET;
@@ -96,7 +100,7 @@ public class CallListObserver extends BroadcastReceiver {
 
     mayStartPeriodicalMissedCallsCheck();
 
-    getCallListAsync();
+    getCallListIfInHomeNetworkAsync();
   }
 
   protected void setupDependencyInjection(Context context) {
@@ -138,6 +142,12 @@ public class CallListObserver extends BroadcastReceiver {
     getCallListAsync();
   }
 
+  protected void getCallListIfInHomeNetworkAsync() {
+    if(userSettings.isCheckOnlyInHomeNetwork() == false || isInHomeNetwork()) {
+      getCallListAsync();
+    }
+  }
+
   protected void getCallListAsync() {
     showGettingCallListNotification();
 
@@ -147,6 +157,12 @@ public class CallListObserver extends BroadcastReceiver {
         getCallListAsyncCompleted(response);
       }
     });
+  }
+
+  protected void getCallListIfInHomeNetworkSynchronously() {
+    if(userSettings.isCheckOnlyInHomeNetwork() == false || isInHomeNetwork()) {
+      getCallListSynchronously();
+    }
   }
 
   protected void getCallListSynchronously() {
@@ -163,6 +179,10 @@ public class CallListObserver extends BroadcastReceiver {
     });
 
     try { countDownLatch.await(30, TimeUnit.SECONDS); } catch(Exception e) { }
+  }
+
+  protected boolean isInHomeNetwork() {
+    return networkService.isInHomeNetwork(userSettings.getHomeNetworkSsid());
   }
 
   protected void showGettingCallListNotification() {
@@ -302,7 +322,7 @@ public class CallListObserver extends BroadcastReceiver {
   protected UserSettingsManagerListener userSettingsManagerListener = new UserSettingsManagerListener() {
     @Override
     public void userSettingsUpdated(UserSettings updatedSettings) {
-      getCallListAsync();
+      getCallListIfInHomeNetworkAsync();
 
       checkIfPeriodicCallListUpdateSettingsChanged(updatedSettings);
     }
@@ -370,7 +390,7 @@ public class CallListObserver extends BroadcastReceiver {
 
   protected void systemHasBooted(Context context) {
     try {
-      getCallListSynchronously();
+      getCallListIfInHomeNetworkSynchronously();
 
       mayStartPeriodicalMissedCallsCheck();
     } catch(Exception e) {
@@ -380,7 +400,7 @@ public class CallListObserver extends BroadcastReceiver {
 
   protected void periodToCheckForMissedCallsElapsed() {
     log.info("Running periodical missed call check ...");
-    getCallListSynchronously();
+    getCallListIfInHomeNetworkSynchronously();
   }
 
 }
