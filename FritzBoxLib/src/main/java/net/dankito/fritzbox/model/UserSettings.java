@@ -12,6 +12,10 @@ public class UserSettings {
 
   protected String fritzBoxPassword;
 
+  protected boolean checkOnlyInHomeNetwork;
+
+  protected String homeNetworkSsid;
+
   protected boolean isPeriodicalMissedCallsCheckEnabled;
 
   protected long periodicalMissedCallsCheckInterval;
@@ -24,6 +28,8 @@ public class UserSettings {
   public UserSettings(String fritzBoxAddress, String fritzBoxPassword) {
     this.fritzBoxAddress = fritzBoxAddress;
     this.fritzBoxPassword = fritzBoxPassword;
+
+    this.checkOnlyInHomeNetwork = true;
   }
 
 
@@ -49,6 +55,22 @@ public class UserSettings {
 
   public void setFritzBoxPassword(String fritzBoxPassword) {
     this.fritzBoxPassword = fritzBoxPassword;
+  }
+
+  public boolean isCheckOnlyInHomeNetwork() {
+    return checkOnlyInHomeNetwork;
+  }
+
+  public void setCheckOnlyInHomeNetwork(boolean checkOnlyInHomeNetwork) {
+    this.checkOnlyInHomeNetwork = checkOnlyInHomeNetwork;
+  }
+
+  public String getHomeNetworkSsid() {
+    return homeNetworkSsid;
+  }
+
+  public void setHomeNetworkSsid(String homeNetworkSsid) {
+    this.homeNetworkSsid = homeNetworkSsid;
   }
 
   public boolean isPeriodicalMissedCallsCheckEnabled() {
