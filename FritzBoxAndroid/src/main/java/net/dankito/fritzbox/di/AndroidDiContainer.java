@@ -5,6 +5,7 @@ import android.content.Context;
 import net.dankito.fritzbox.model.UserSettings;
 import net.dankito.fritzbox.services.AlarmManagerCronService;
 import net.dankito.fritzbox.services.AndroidFileStorageService;
+import net.dankito.fritzbox.services.AndroidNetworkService;
 import net.dankito.fritzbox.services.CallListObserver;
 import net.dankito.fritzbox.services.CsvParser;
 import net.dankito.fritzbox.services.DigestService;
@@ -15,6 +16,7 @@ import net.dankito.fritzbox.services.ICsvParser;
 import net.dankito.fritzbox.services.IDigestService;
 import net.dankito.fritzbox.services.IEncryptionService;
 import net.dankito.fritzbox.services.IFileStorageService;
+import net.dankito.fritzbox.services.INetworkService;
 import net.dankito.fritzbox.services.NotificationsService;
 import net.dankito.fritzbox.services.UserSettingsManager;
 import net.dankito.fritzbox.services.exceptions.EncryptionServiceException;
@@ -75,6 +77,12 @@ public class AndroidDiContainer {
   @Singleton
   public ICsvParser provideCsvParser() {
     return new CsvParser();
+  }
+
+  @Provides
+  @Singleton
+  public INetworkService provideNetworkService(Context context) {
+    return new AndroidNetworkService(context);
   }
 
   @Provides
