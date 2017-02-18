@@ -14,6 +14,7 @@
     <string name="fragment_settings_hint_fritz_box_address_or_password_not_set">FritzBox Adresse oder Passwort ist nicht gesetzt.\nOhne ist keine Verbindung zur FritzBox möglich.</string>
     <string name="fragment_settings_testing_fritz_box_settings_failed_title">Einloggen auf FritzBox fehlgeschlagen</string>
     <string name="fragment_settings_testing_fritz_box_settings_succeeded">Einloggen erfolgreich, Einstellungen sind richtig</string>
+    <string name="fragment_setting_check_only_in_home_network">Nur im Heimnetz</string>
     <string name="fragment_setting_periodically_check_for_missed_calls">Periodisch verpasste Anrufe abfragen</string>
 
     <string name="notification_could_not_get_call_list">Konnte Anrufliste nicht ermitteln</string>

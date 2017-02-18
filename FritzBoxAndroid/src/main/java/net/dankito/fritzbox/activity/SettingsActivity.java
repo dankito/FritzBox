@@ -43,6 +43,10 @@ public class SettingsActivity extends AppCompatActivity {
 
   protected EditText edtxtPassword;
 
+  protected CheckBox chkbxCheckOnlyWhenInHomeNetwork;
+
+  protected EditText edtxtHomeNetworkSsid;
+
   protected CheckBox chkbxPeriodicallyCheckForMissedCalls;
 
   protected TextView txtvwEveryLabel;
@@ -75,6 +79,15 @@ public class SettingsActivity extends AppCompatActivity {
 
     Button btnTestFritzBoxSettings = (Button)findViewById(R.id.btnTestFritzBoxSettings);
     btnTestFritzBoxSettings.setOnClickListener(btnTestFritzBoxSettingsClickListener);
+
+
+    edtxtHomeNetworkSsid = (EditText)findViewById(R.id.edtxtHomeNetworkSsid);
+    edtxtHomeNetworkSsid.setText(userSettings.getHomeNetworkSsid());
+
+    chkbxCheckOnlyWhenInHomeNetwork = (CheckBox)findViewById(R.id.chkbxCheckOnlyWhenInHomeNetwork);
+    chkbxCheckOnlyWhenInHomeNetwork.setOnCheckedChangeListener(chkbxCheckOnlyWhenInHomeNetworkCheckedChangeListener);
+    chkbxCheckOnlyWhenInHomeNetwork.setChecked(userSettings.isCheckOnlyInHomeNetwork());
+
 
     txtvwEveryLabel = (TextView)findViewById(R.id.txtvwEveryLabel);
     txtvwMinutesLabel = (TextView)findViewById(R.id.txtvwMinutesLabel);
@@ -149,6 +162,9 @@ public class SettingsActivity extends AppCompatActivity {
     userSettings.setFritzBoxAddress(edtxtAddress.getText().toString());
     userSettings.setFritzBoxPassword(edtxtPassword.getText().toString());
 
+    userSettings.setCheckOnlyInHomeNetwork(chkbxCheckOnlyWhenInHomeNetwork.isChecked());
+    userSettings.setHomeNetworkSsid(edtxtHomeNetworkSsid.getText().toString());
+
     userSettings.setPeriodicalMissedCallsCheckEnabled(chkbxPeriodicallyCheckForMissedCalls.isChecked());
     try {
       int periodInMinutes = Integer.parseInt(edtxtPeriodicalMissedCallsCheckInterval.getText().toString());
@@ -176,6 +192,13 @@ public class SettingsActivity extends AppCompatActivity {
       edtxtPeriodicalMissedCallsCheckInterval.setEnabled(checked);
       txtvwEveryLabel.setEnabled(checked);
       txtvwMinutesLabel.setEnabled(checked);
+    }
+  };
+
+  protected CompoundButton.OnCheckedChangeListener chkbxCheckOnlyWhenInHomeNetworkCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+      edtxtHomeNetworkSsid.setEnabled(checked);
     }
   };
 

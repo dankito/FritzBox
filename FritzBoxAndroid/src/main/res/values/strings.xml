@@ -13,6 +13,7 @@
     <string name="fragment_settings_hint_fritz_box_address_or_password_not_set">FritzBox address or password not set.\nWithout app cannot connect to FritzBox.</string>
     <string name="fragment_settings_testing_fritz_box_settings_failed_title">Login to FritzBox failed</string>
     <string name="fragment_settings_testing_fritz_box_settings_succeeded">Login success, settings are correct</string>
+    <string name="fragment_setting_check_only_in_home_network">Only in Home Network</string>
     <string name="fragment_setting_periodically_check_for_missed_calls">Periodically check for missed calls</string>
 
     <string name="notification_could_not_get_call_list">Could not get call list</string>
