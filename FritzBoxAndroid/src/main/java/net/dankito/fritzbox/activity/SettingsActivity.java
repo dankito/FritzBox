@@ -16,6 +16,7 @@ import net.dankito.fritzbox.FritzBoxAndroidApplication;
 import net.dankito.fritzbox.R;
 import net.dankito.fritzbox.model.UserSettings;
 import net.dankito.fritzbox.services.FritzBoxClient;
+import net.dankito.fritzbox.services.INetworkService;
 import net.dankito.fritzbox.services.UserSettingsManager;
 import net.dankito.fritzbox.util.AlertHelper;
 import net.dankito.fritzbox.utils.web.callbacks.LoginCallback;
@@ -38,6 +39,9 @@ public class SettingsActivity extends AppCompatActivity {
   @Inject
   protected FritzBoxClient fritzBoxClient;
 
+  @Inject
+  protected INetworkService networkService;
+
 
   protected EditText edtxtAddress;
 
@@ -46,6 +50,8 @@ public class SettingsActivity extends AppCompatActivity {
   protected CheckBox chkbxCheckOnlyWhenInHomeNetwork;
 
   protected EditText edtxtHomeNetworkSsid;
+
+  protected Button btnSetSsidToCurrentSsid;
 
   protected CheckBox chkbxPeriodicallyCheckForMissedCalls;
 
@@ -87,6 +93,10 @@ public class SettingsActivity extends AppCompatActivity {
     chkbxCheckOnlyWhenInHomeNetwork = (CheckBox)findViewById(R.id.chkbxCheckOnlyWhenInHomeNetwork);
     chkbxCheckOnlyWhenInHomeNetwork.setOnCheckedChangeListener(chkbxCheckOnlyWhenInHomeNetworkCheckedChangeListener);
     chkbxCheckOnlyWhenInHomeNetwork.setChecked(userSettings.isCheckOnlyInHomeNetwork());
+
+    btnSetSsidToCurrentSsid = (Button)findViewById(R.id.btnSetSsidToCurrentSsid);
+    btnSetSsidToCurrentSsid.setText(getString(R.string.fragment_setting_set_ssid_to_current_ssid, networkService.getCurrentSsid()));
+    btnSetSsidToCurrentSsid.setOnClickListener(btnSetSsidToCurrentSsidClickListener);
 
 
     txtvwEveryLabel = (TextView)findViewById(R.id.txtvwEveryLabel);
@@ -186,12 +196,10 @@ public class SettingsActivity extends AppCompatActivity {
     }
   };
 
-  protected CompoundButton.OnCheckedChangeListener chkbxPeriodicallyCheckForMissedCallsCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+  protected View.OnClickListener btnSetSsidToCurrentSsidClickListener = new View.OnClickListener() {
     @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-      edtxtPeriodicalMissedCallsCheckInterval.setEnabled(checked);
-      txtvwEveryLabel.setEnabled(checked);
-      txtvwMinutesLabel.setEnabled(checked);
+    public void onClick(View view) {
+      edtxtHomeNetworkSsid.setText(networkService.getCurrentSsid());
     }
   };
 
@@ -199,6 +207,15 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
       edtxtHomeNetworkSsid.setEnabled(checked);
+    }
+  };
+
+  protected CompoundButton.OnCheckedChangeListener chkbxPeriodicallyCheckForMissedCallsCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+      edtxtPeriodicalMissedCallsCheckInterval.setEnabled(checked);
+      txtvwEveryLabel.setEnabled(checked);
+      txtvwMinutesLabel.setEnabled(checked);
     }
   };
 

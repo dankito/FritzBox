@@ -14,6 +14,7 @@
     <string name="fragment_settings_testing_fritz_box_settings_failed_title">Login to FritzBox failed</string>
     <string name="fragment_settings_testing_fritz_box_settings_succeeded">Login success, settings are correct</string>
     <string name="fragment_setting_check_only_in_home_network">Only in Home Network</string>
+    <string name="fragment_setting_set_ssid_to_current_ssid">Set to \'%s\'</string>
     <string name="fragment_setting_periodically_check_for_missed_calls">Periodically check for missed calls</string>
 
     <string name="notification_could_not_get_call_list">Could not get call list</string>

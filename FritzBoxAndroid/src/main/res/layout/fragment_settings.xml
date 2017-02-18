@@ -110,19 +110,19 @@
         <RelativeLayout
             android:id="@+id/rlytCheckOnlyWhenInHomeNetwork"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/fragment_settings_edit_texts_height"
+            android:layout_height="@dimen/fragment_settings_home_network_settings_height"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_below="@id/btnTestFritzBoxSettings"
+            android:layout_marginBottom="@dimen/fragment_settings_sections_margin"
             >
 
             <CheckBox
                 android:id="@+id/chkbxCheckOnlyWhenInHomeNetwork"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/fragment_settings_edit_texts_height"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
                 android:gravity="center_vertical"
                 style="@android:style/TextAppearance.Medium"
                 android:text="@string/fragment_setting_check_only_in_home_network"
@@ -131,16 +131,24 @@
             <EditText
                 android:id="@+id/edtxtHomeNetworkSsid"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/fragment_settings_edit_texts_height"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
                 android:layout_marginLeft="@dimen/fragment_settings_edit_texts_left_margin"
                 android:layout_toRightOf="@id/chkbxCheckOnlyWhenInHomeNetwork"
                 android:gravity="center_vertical"
                 android:lines="1"
-                android:text="Pretty fly for a Wifi"
             />
+
+            <Button
+                android:id="@+id/btnSetSsidToCurrentSsid"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/fragment_settings_buttons_height"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/edtxtHomeNetworkSsid"
+                android:textAllCaps="false"
+                />
 
         </RelativeLayout>
 
