@@ -26,219 +26,227 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/appBarLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:fillViewport="true"
     >
 
-        <TextView
-            android:id="@+id/txtvwHintFritzBoxAddressOrPasswordNotSet"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="@dimen/fragment_settings_sections_margin"
-            style="@android:style/TextAppearance.Medium"
-            android:text="@string/fragment_settings_hint_fritz_box_address_or_password_not_set"
-            android:visibility="gone"
-        />
-
-        <TextView
-            android:id="@+id/txtvwAddressLabel"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/fragment_settings_labels_height"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/txtvwHintFritzBoxAddressOrPasswordNotSet"
-            android:gravity="center_vertical"
-            style="@android:style/TextAppearance.Medium"
-            android:text="@string/fragment_settings_fritz_box_address_title"
-        />
-
-        <EditText
-            android:id="@+id/edtxtAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/fragment_settings_edit_texts_height"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="@dimen/fragment_settings_edit_texts_bottom_margin"
-            android:layout_below="@id/txtvwAddressLabel"
-        />
-
-        <TextView
-            android:id="@+id/txtvwPasswordLabel"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/fragment_settings_labels_height"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/edtxtAddress"
-            android:gravity="center_vertical"
-            style="@android:style/TextAppearance.Medium"
-            android:text="@string/fragment_settings_fritz_box_password_title"
-        />
-
-        <EditText
-            android:id="@+id/edtxtPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/fragment_settings_edit_texts_height"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/txtvwPasswordLabel"
-            android:layout_marginBottom="@dimen/fragment_settings_edit_texts_bottom_margin"
-            android:inputType="textPassword"
-        />
-
-        <Button
-            android:id="@+id/btnTestFritzBoxSettings"
-            android:layout_width="@dimen/fragment_settings_buttons_width"
-            android:layout_height="@dimen/fragment_settings_buttons_height"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/edtxtPassword"
-            android:layout_marginBottom="@dimen/fragment_settings_sections_margin"
-            android:text="@string/test"
-        />
-
-        <RelativeLayout
-            android:id="@+id/rlytCheckOnlyWhenInHomeNetwork"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/fragment_settings_home_network_settings_height"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/btnTestFritzBoxSettings"
-            android:layout_marginBottom="@dimen/fragment_settings_sections_margin"
-            >
-
-            <CheckBox
-                android:id="@+id/chkbxCheckOnlyWhenInHomeNetwork"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/fragment_settings_edit_texts_height"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:gravity="center_vertical"
-                style="@android:style/TextAppearance.Medium"
-                android:text="@string/fragment_setting_check_only_in_home_network"
-            />
-
-            <EditText
-                android:id="@+id/edtxtHomeNetworkSsid"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/fragment_settings_edit_texts_height"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="@dimen/fragment_settings_edit_texts_left_margin"
-                android:layout_toRightOf="@id/chkbxCheckOnlyWhenInHomeNetwork"
-                android:gravity="center_vertical"
-                android:lines="1"
-            />
-
-            <Button
-                android:id="@+id/btnSetSsidToCurrentSsid"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/fragment_settings_buttons_height"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_below="@id/edtxtHomeNetworkSsid"
-                android:textAllCaps="false"
-                />
-
-        </RelativeLayout>
-
-        <CheckBox
-            android:id="@+id/chkbxPeriodicallyCheckForMissedCalls"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/fragment_settings_edit_texts_height"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/rlytCheckOnlyWhenInHomeNetwork"
-            style="@android:style/TextAppearance.Medium"
-            android:text="@string/fragment_setting_periodically_check_for_missed_calls"
-        />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/fragment_settings_edit_texts_height"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/chkbxPeriodicallyCheckForMissedCalls"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
         >
 
             <TextView
-                android:id="@+id/txtvwEveryLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:id="@+id/txtvwHintFritzBoxAddressOrPasswordNotSet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:layout_toLeftOf="@+id/edtxtPeriodicalMissedCallsCheckInterval"
-                android:gravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/fragment_settings_sections_margin"
                 style="@android:style/TextAppearance.Medium"
-                android:text="@string/every"
-                android:enabled="false"
-            />
-
-            <EditText
-                android:id="@+id/edtxtPeriodicalMissedCallsCheckInterval"
-                android:layout_width="@dimen/fragment_settings_edit_text_periodical_missed_calls_check_interval_width"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:layout_toLeftOf="@+id/txtvwMinutesLabel"
-                android:gravity="center_vertical|right"
-                android:layout_marginLeft="@dimen/fragment_settings_edit_text_periodical_missed_calls_check_interval__vertical_margin"
-                android:layout_marginRight="@dimen/fragment_settings_edit_text_periodical_missed_calls_check_interval__vertical_margin"
-                android:inputType="number"
-                android:enabled="false"
+                android:text="@string/fragment_settings_hint_fritz_box_address_or_password_not_set"
+                android:visibility="gone"
             />
 
             <TextView
-                android:id="@+id/txtvwMinutesLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
+                android:id="@+id/txtvwAddressLabel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/fragment_settings_labels_height"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
+                android:layout_below="@+id/txtvwHintFritzBoxAddressOrPasswordNotSet"
                 android:gravity="center_vertical"
                 style="@android:style/TextAppearance.Medium"
-                android:text="@string/minutes"
-                android:enabled="false"
+                android:text="@string/fragment_settings_fritz_box_address_title"
+            />
+
+            <EditText
+                android:id="@+id/edtxtAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/fragment_settings_edit_texts_height"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/fragment_settings_edit_texts_bottom_margin"
+                android:layout_below="@id/txtvwAddressLabel"
+            />
+
+            <TextView
+                android:id="@+id/txtvwPasswordLabel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/fragment_settings_labels_height"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/edtxtAddress"
+                android:gravity="center_vertical"
+                style="@android:style/TextAppearance.Medium"
+                android:text="@string/fragment_settings_fritz_box_password_title"
+            />
+
+            <EditText
+                android:id="@+id/edtxtPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/fragment_settings_edit_texts_height"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/txtvwPasswordLabel"
+                android:layout_marginBottom="@dimen/fragment_settings_edit_texts_bottom_margin"
+                android:inputType="textPassword"
+            />
+
+            <Button
+                android:id="@+id/btnTestFritzBoxSettings"
+                android:layout_width="@dimen/fragment_settings_buttons_width"
+                android:layout_height="@dimen/fragment_settings_buttons_height"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/edtxtPassword"
+                android:layout_marginBottom="@dimen/fragment_settings_sections_margin"
+                android:text="@string/test"
+            />
+
+            <RelativeLayout
+                android:id="@+id/rlytCheckOnlyWhenInHomeNetwork"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/fragment_settings_home_network_settings_height"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/btnTestFritzBoxSettings"
+                android:layout_marginBottom="@dimen/fragment_settings_sections_margin"
+                >
+
+                <CheckBox
+                    android:id="@+id/chkbxCheckOnlyWhenInHomeNetwork"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/fragment_settings_edit_texts_height"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
+                    style="@android:style/TextAppearance.Medium"
+                    android:text="@string/fragment_setting_check_only_in_home_network"
+                />
+
+                <EditText
+                    android:id="@+id/edtxtHomeNetworkSsid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/fragment_settings_edit_texts_height"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="@dimen/fragment_settings_edit_texts_left_margin"
+                    android:layout_toRightOf="@id/chkbxCheckOnlyWhenInHomeNetwork"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                />
+
+                <Button
+                    android:id="@+id/btnSetSsidToCurrentSsid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/fragment_settings_buttons_height"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@id/edtxtHomeNetworkSsid"
+                    android:textAllCaps="false"
+                    />
+
+            </RelativeLayout>
+
+            <CheckBox
+                android:id="@+id/chkbxPeriodicallyCheckForMissedCalls"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/fragment_settings_edit_texts_height"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/rlytCheckOnlyWhenInHomeNetwork"
+                style="@android:style/TextAppearance.Medium"
+                android:text="@string/fragment_setting_periodically_check_for_missed_calls"
+            />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/fragment_settings_edit_texts_height"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/chkbxPeriodicallyCheckForMissedCalls"
+            >
+
+                <TextView
+                    android:id="@+id/txtvwEveryLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toLeftOf="@+id/edtxtPeriodicalMissedCallsCheckInterval"
+                    android:gravity="center_vertical"
+                    style="@android:style/TextAppearance.Medium"
+                    android:text="@string/every"
+                    android:enabled="false"
+                />
+
+                <EditText
+                    android:id="@+id/edtxtPeriodicalMissedCallsCheckInterval"
+                    android:layout_width="@dimen/fragment_settings_edit_text_periodical_missed_calls_check_interval_width"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toLeftOf="@+id/txtvwMinutesLabel"
+                    android:gravity="center_vertical|right"
+                    android:layout_marginLeft="@dimen/fragment_settings_edit_text_periodical_missed_calls_check_interval__vertical_margin"
+                    android:layout_marginRight="@dimen/fragment_settings_edit_text_periodical_missed_calls_check_interval__vertical_margin"
+                    android:inputType="number"
+                    android:enabled="false"
+                />
+
+                <TextView
+                    android:id="@+id/txtvwMinutesLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    style="@android:style/TextAppearance.Medium"
+                    android:text="@string/minutes"
+                    android:enabled="false"
+                />
+
+            </RelativeLayout>
+
+
+            <Button
+                android:id="@+id/btnOk"
+                android:layout_width="@dimen/fragment_settings_buttons_width"
+                android:layout_height="@dimen/fragment_settings_buttons_height"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/fragment_settings_sections_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:text="@android:string/ok"
+            />
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="@dimen/fragment_settings_buttons_width"
+                android:layout_height="@dimen/fragment_settings_buttons_height"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/btnOk"
+                android:layout_alignTop="@+id/btnOk"
+                android:layout_alignBottom="@+id/btnOk"
+                android:layout_marginRight="@dimen/fragment_settings_cancel_and_ok_button_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:text="@android:string/cancel"
             />
 
         </RelativeLayout>
 
-
-        <Button
-            android:id="@+id/btnOk"
-            android:layout_width="@dimen/fragment_settings_buttons_width"
-            android:layout_height="@dimen/fragment_settings_buttons_height"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/fragment_settings_sections_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@android:string/ok"
-        />
-
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="@dimen/fragment_settings_buttons_width"
-            android:layout_height="@dimen/fragment_settings_buttons_height"
-            android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/btnOk"
-            android:layout_alignTop="@+id/btnOk"
-            android:layout_alignBottom="@+id/btnOk"
-            android:layout_marginRight="@dimen/fragment_settings_cancel_and_ok_button_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@android:string/cancel"
-        />
-
-    </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>
