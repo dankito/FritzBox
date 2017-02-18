@@ -149,7 +149,7 @@ public class CallListObserver extends BroadcastReceiver {
     });
   }
 
-  protected void getCallListSynchronous() {
+  protected void getCallListSynchronously() {
     showGettingCallListNotification();
 
     final CountDownLatch countDownLatch = new CountDownLatch(1);
@@ -370,7 +370,7 @@ public class CallListObserver extends BroadcastReceiver {
 
   protected void systemHasBooted(Context context) {
     try {
-      getCallListSynchronous();
+      getCallListSynchronously();
 
       mayStartPeriodicalMissedCallsCheck();
     } catch(Exception e) {
@@ -380,7 +380,7 @@ public class CallListObserver extends BroadcastReceiver {
 
   protected void periodToCheckForMissedCallsElapsed() {
     log.info("Running periodical missed call check ...");
-    getCallListSynchronous();
+    getCallListSynchronously();
   }
 
 }
