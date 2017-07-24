@@ -42,8 +42,6 @@ public class CallListObserver extends BroadcastReceiver {
 
   protected static final String CALL_LIST_FILENAME = "CallList.json";
 
-  protected static final String GETTING_CALL_LIST_NOTIFICATION_TAG = "GettingCallListNotificationTag";
-
   protected static final String COULD_NOT_GET_CALL_LIST_NOTIFICATION_TAG = "CouldNotGetCallList";
 
   protected static final String MISSED_CALL_NOTIFICATION_TAG = "MissedCall";
@@ -149,8 +147,6 @@ public class CallListObserver extends BroadcastReceiver {
   }
 
   protected void getCallListAsync() {
-    showGettingCallListNotification();
-
     fritzBoxClient.getCallListAsync(new GetCallListCallback() {
       @Override
       public void completed(GetCallListResponse response) {
@@ -166,8 +162,6 @@ public class CallListObserver extends BroadcastReceiver {
   }
 
   protected void getCallListSynchronously() {
-    showGettingCallListNotification();
-
     final CountDownLatch countDownLatch = new CountDownLatch(1);
 
     fritzBoxClient.getCallListAsync(new GetCallListCallback() {
@@ -185,14 +179,7 @@ public class CallListObserver extends BroadcastReceiver {
     return networkService.isInHomeNetwork(userSettings.getHomeNetworkSsid());
   }
 
-  protected void showGettingCallListNotification() {
-    int iconId = context.getResources().getIdentifier("@android:drawable/stat_notify_sync", null, null);
-    notificationsService.showNotification(new NotificationConfig("Hole Anrufeliste", "Bin hier hart am arbeiten", iconId), GETTING_CALL_LIST_NOTIFICATION_TAG);
-  }
-
   protected void getCallListAsyncCompleted(GetCallListResponse response) {
-    notificationsService.dismissNotification(GETTING_CALL_LIST_NOTIFICATION_TAG);
-
     if(response.isSuccessful() == false) {
       showCouldNotRetrieveCallListNotification(response);
     }
