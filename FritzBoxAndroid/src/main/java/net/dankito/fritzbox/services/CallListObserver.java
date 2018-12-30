@@ -159,6 +159,9 @@ public class CallListObserver extends BroadcastReceiver {
     if(userSettings.isCheckOnlyInHomeNetwork() == false || isInHomeNetwork()) {
       getCallListSynchronously();
     }
+    else {
+      log.info("Is in network '" + networkService.getCurrentSsid() + "' not in home network '" + userSettings.getHomeNetworkSsid() + "'");
+    }
   }
 
   protected void getCallListSynchronously() {
