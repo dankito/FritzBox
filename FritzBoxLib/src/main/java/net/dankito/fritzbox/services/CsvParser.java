@@ -60,8 +60,13 @@ public class CsvParser implements ICsvParser {
    */
   protected Call parseCallListEntry(final String csvLine) {
     final String[] lineData = csvLine.split(";");
-    final Call.Builder builder = new Call.Builder().type(lineData[0]).callerName(lineData[2])
-        .callerNumber(lineData[3]).substationName(lineData[4]).substationNumber(lineData[5]);
+
+    final Call.Builder builder = new Call.Builder()
+        .type(lineData[0])
+        .callerName(lineData[2])
+        .callerNumber(lineData[3])
+        .substationName(lineData[4])
+        .substationNumber(lineData[5]);
 
     try {
       builder.date(lineData[1]);
