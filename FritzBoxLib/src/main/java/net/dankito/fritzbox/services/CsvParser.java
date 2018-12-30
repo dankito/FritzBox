@@ -1,6 +1,7 @@
 package net.dankito.fritzbox.services;
 
 import net.dankito.fritzbox.model.Call;
+import net.dankito.fritzbox.utils.StringUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +17,15 @@ import java.util.List;
 
 public class CsvParser implements ICsvParser {
 
+  private static final String CALL_LIST_CSV_HEADER = "sep=;\nTyp;Datum;Name;Rufnummer;Nebenstelle;Eigene Rufnummer;Dauer\n";
+
   private static final Logger log = LoggerFactory.getLogger(CsvParser.class);
 
+
+  @Override
+  public boolean isCallListCsv(String response) {
+    return StringUtils.isNotNullOrEmpty(response) && response.startsWith(CALL_LIST_CSV_HEADER);
+  }
 
   /**
    * Parses a call list CSV file.
@@ -26,6 +34,7 @@ public class CsvParser implements ICsvParser {
    *            The CSV file as string.
    * @return The parsed calls as list of Call objects.
    */
+  @Override
   public List<Call> parseCallList(final String csvString) {
     final List<Call> callerList = new ArrayList<>();
 

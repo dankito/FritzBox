@@ -203,18 +203,11 @@ public class FritzBoxClient {
         if(response.isSuccessful() == false) {
           callback.completed(new GetCallListResponse(response.getError()));
         }
-        else if(isCallListCsv(response)) {
+        else if(csvParser.isCallListCsv(response.getBody())) {
           parseCallListCsv(response, callback);
         }
       }
     });
-  }
-
-  protected boolean isCallListCsv(WebClientResponse response) {
-    String responseString = response.getBody();
-
-    return StringUtils.isNotNullOrEmpty(responseString) &&
-        responseString.startsWith("sep=;\nTyp;Datum;Name;Rufnummer;Nebenstelle;Eigene Rufnummer;Dauer\n");
   }
 
   protected void parseCallListCsv(WebClientResponse response, GetCallListCallback callback) {

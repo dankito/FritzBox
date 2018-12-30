@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface ICsvParser {
 
+  boolean isCallListCsv(String response);
+
   List<Call> parseCallList(final String csvString);
 
 }
