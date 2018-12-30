@@ -29,4 +29,9 @@ public class WebClientResponse extends ResponseBase {
     return body;
   }
 
+
+  @Override
+  public String toString() {
+    return super.toString() + "; body = \n" + body;
+  }
 }

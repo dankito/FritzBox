@@ -23,4 +23,10 @@ public class GetStringInfoResponse extends ResponseBase {
     return stringInfo;
   }
 
+
+  @Override
+  public String toString() {
+    return super.toString() + "; stringInfo = " + stringInfo;
+  }
+
 }

@@ -27,4 +27,10 @@ public class GetCallListResponse extends ResponseBase {
     return callList;
   }
 
+
+  @Override
+  public String toString() {
+    return super.toString() + "; CallList = " + (callList == null ? "null" : callList.size());
+  }
+
 }
