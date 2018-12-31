@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * In large parts a copy of https://github.com/ISchwarz23/FritzBox-API.
@@ -29,6 +31,8 @@ import java.util.List;
 public class FritzBoxClient {
 
   protected static final int COUNT_CONNECTION_RETRIES = 2;
+
+  protected static final int RETRY_TO_GET_CALL_LIST_AFTER_SESSION_TIMEOUT_MILLIS = 30 * 1000;
 
 
   private static final Logger log = LoggerFactory.getLogger(FritzBoxClient.class);
@@ -206,6 +210,9 @@ public class FritzBoxClient {
         else if(csvParser.isCallListCsv(response.getBody())) {
           parseCallListCsv(response, callback);
         }
+        else if(isSessionTimedOutResponse(response)) {
+          handleSessionTimedOutForGetCallList(response, callback);
+        }
       }
     });
   }
@@ -215,6 +222,27 @@ public class FritzBoxClient {
     List<Call> callList = csvParser.parseCallList(csvFileContent);
 
     callback.completed(new GetCallListResponse(callList));
+  }
+
+  protected boolean isSessionTimedOutResponse(WebClientResponse response) {
+    String responseString = response.getBody();
+
+    return StringUtils.isNotNullOrEmpty(responseString) && responseString.contains("action=\"/login.lua\"");
+  }
+
+  protected void handleSessionTimedOutForGetCallList(WebClientResponse response, final GetCallListCallback callback) {
+    invalidateSession();
+
+    new Timer().schedule(new TimerTask() {
+      @Override
+      public void run() {
+        getCallListAsync(callback);
+      }
+    }, RETRY_TO_GET_CALL_LIST_AFTER_SESSION_TIMEOUT_MILLIS); // try again in 30 seconds
+  }
+
+  protected void invalidateSession() {
+    sessionId = null;
   }
 
 
